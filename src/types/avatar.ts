@@ -1,4 +1,4 @@
-export type TAvatar = {
+export type TPropsAvatar = {
     img: string;
     small?: boolean;
 };

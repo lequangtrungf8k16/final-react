@@ -53,7 +53,7 @@ export default function Sidebar() {
                 <Instagram className="hidden sm:inline sm:mt-2 lg:hidden transition-all" />
             </NavLink>
 
-            <div className="flex flex-row md:w-full md:flex-1 md:flex-col md:items-center md:mt-10">
+            <div className="flex flex-row justify-between md:w-full md:flex-1 md:flex-col md:items-center md:mt-10">
                 {SIDEBAR_ITEM.map((item) => (
                     <SidebarItem
                         key={item.href}

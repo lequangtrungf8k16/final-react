@@ -32,7 +32,7 @@ export default function SidebarItem({
             }
         >
             {({ isActive }) => (
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4">
                     <Icon
                         className={cn(
                             "h-6! w-6! transition-all",

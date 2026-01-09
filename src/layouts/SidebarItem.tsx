@@ -7,12 +7,14 @@ interface SidebarItemProps {
     href: string;
     label: string;
     icon: LucideIcon;
+    className: string;
 }
 
 export default function SidebarItem({
     href,
     label,
     icon: Icon,
+    className,
 }: SidebarItemProps) {
     return (
         <NavLink
@@ -20,7 +22,9 @@ export default function SidebarItem({
             className={({ isActive }) =>
                 cn(
                     buttonVariants({ variant: "ghost", size: "lg" }),
-                    "w-full justify-start my-1 px-4 transition-all",
+                    `md:mx-auto md:my-1 lg:w-full lg:ml-0.5 lg:flex lg:justify-start transition-all ${
+                        className || ""
+                    }`,
                     isActive
                         ? "font-bold text-primary"
                         : "text-muted-foreground hover:bg-secondary hover:text-primary"
@@ -28,14 +32,14 @@ export default function SidebarItem({
             }
         >
             {({ isActive }) => (
-                <div className="flex items-center gap-4 mx-auto xl:mx-0">
+                <div className="flex items-center gap-4">
                     <Icon
                         className={cn(
                             "h-6! w-6! transition-all",
                             isActive ? "stroke-2 scale-105" : "stroke-1"
                         )}
                     />
-                    <span className="hidden xl:inline text-lg">{label}</span>
+                    <span className="hidden lg:inline text-lg">{label}</span>
                 </div>
             )}
         </NavLink>

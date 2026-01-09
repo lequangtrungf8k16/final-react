@@ -22,7 +22,7 @@ export default function SidebarItem({
             className={({ isActive }) =>
                 cn(
                     buttonVariants({ variant: "ghost", size: "lg" }),
-                    `md:mx-auto md:my-1 lg:w-full lg:ml-0.5 lg:flex lg:justify-start transition-all ${
+                    `flex justify-around gap-2 md:mx-auto md:my-1 lg:w-full lg:ml-0.5 lg:flex lg:justify-start transition-all ${
                         className || ""
                     }`,
                     isActive
@@ -32,7 +32,7 @@ export default function SidebarItem({
             }
         >
             {({ isActive }) => (
-                <div className="flex items-center gap-2 md:gap-4">
+                <div className="flex items-center gap-2 md:gap-4 p-0">
                     <Icon
                         className={cn(
                             "h-6! w-6! transition-all",

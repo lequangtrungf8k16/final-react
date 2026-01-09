@@ -26,13 +26,15 @@ export default function SidebarDropDown({
                 <button
                     className={cn(
                         buttonVariants({ variant: "ghost", size: "lg" }),
-                        "md:mx-auto md:my-1 lg:w-full lg:ml-0.5 lg:flex lg:justify-start cursor-pointer transition-all",
+                        "md:mx-auto md:my-1 lg:w-full lg:ml-2.5 lg:flex lg:justify-start lg:gap-4 cursor-pointer transition-all",
                         "focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none",
                         className
                     )}
                 >
                     <Icon className={cn("h-6! w-6! transition-all")} />
-                    <span className="hidden lg:inline text-lg">{label}</span>
+                    <span className="hidden lg:inline text-lg text-muted-foreground">
+                        {label}
+                    </span>
                 </button>
             </DropdownMenuTrigger>
 

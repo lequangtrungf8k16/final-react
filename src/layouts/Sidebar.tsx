@@ -42,7 +42,7 @@ const SIDEBAR_ITEM = [
 
 export default function Sidebar() {
     return (
-        <nav className="fixed bottom-0 left-0 right-0 w-full h-20 flex flex-row justify-around items-center bg-white md:sticky md:top-0 md:h-screen md:mx-0 md:flex-col md:w-20 lg:w-60 md:border-r-2 md:py-4">
+        <nav className="fixed bottom-0 left-0 right-0 w-full h-20 flex flex-row justify-center items-center bg-white md:sticky md:top-0 md:h-screen md:mx-0 md:flex-col md:w-20 lg:w-60 md:border-r-2 md:py-4">
             <NavLink
                 to={"/"}
                 className="hidden mx-auto md:flex w-full justify-center"

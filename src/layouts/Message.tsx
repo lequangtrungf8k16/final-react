@@ -1,6 +1,8 @@
 import { ChevronsLeftRight, Heart, Send, X } from "lucide-react";
+import { useState } from "react";
 
 export default function Message() {
+    const [isOpen, setIsOpen] = useState(false);
     const handleClick = () => {};
     return (
         <div

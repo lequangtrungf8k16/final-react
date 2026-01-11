@@ -1,13 +1,13 @@
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 interface SidebarItemProps {
-    href: string;
+    href?: string;
     label: string;
     icon: LucideIcon;
     className: string;
+    onClick?: () => void;
 }
 
 export default function SidebarItem({
@@ -15,33 +15,42 @@ export default function SidebarItem({
     label,
     icon: Icon,
     className,
+    onClick,
 }: SidebarItemProps) {
+    const commonClass = cn(
+        "flex items-center justify-center lg:justify-start gap-4 p-3 hover:bg-gray-100 rounded-lg transition-all cursor-pointer text-base group w-full",
+        className
+    );
+
+    const labelClass = cn(
+        "hidden lg:block",
+        !label && "hidden",
+        "text-base font-normal"
+    );
+    if (href) {
+        return (
+            <NavLink
+                to={href}
+                className={({ isActive }) =>
+                    cn(commonClass, isActive && "font-bold bg-gray-100")
+                }
+                onClick={onClick}
+            >
+                <Icon
+                    size={24}
+                    className="group-hover:scale-105 transition-transform"
+                />
+                <span className={labelClass}>{label}</span>
+            </NavLink>
+        );
+    }
     return (
-        <NavLink
-            to={href}
-            className={({ isActive }) =>
-                cn(
-                    buttonVariants({ variant: "ghost", size: "lg" }),
-                    `flex justify-around gap-2 md:mx-auto md:my-1 lg:w-full lg:ml-0.5 lg:flex lg:justify-start transition-all ${
-                        className || ""
-                    }`,
-                    isActive
-                        ? "font-bold text-primary"
-                        : "text-muted-foreground hover:bg-secondary hover:text-primary"
-                )
-            }
-        >
-            {({ isActive }) => (
-                <div className="flex items-center gap-2 md:gap-4 p-0">
-                    <Icon
-                        className={cn(
-                            "h-6! w-6! transition-all",
-                            isActive ? "stroke-2 scale-105" : "stroke-1"
-                        )}
-                    />
-                    <span className="hidden lg:inline text-lg">{label}</span>
-                </div>
-            )}
-        </NavLink>
+        <div className={commonClass} onClick={onClick} role="button">
+            <Icon
+                size={24}
+                className="group-hover:scale-105 transition-transform focus-visible:ring-0"
+            />
+            <span className={labelClass}>{label}</span>
+        </div>
     );
 }

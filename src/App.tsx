@@ -1,18 +1,29 @@
-import Footer from "./layouts/Footer";
-import Message from "./layouts/Message";
-import Sidebar from "./layouts/Sidebar";
+import { Route, Routes } from "react-router-dom";
+import MainLayout from "./layouts/MainLayout";
+import HomePage from "./pages/HomePage";
+import ExplorePage from "./pages/ExplorePage";
+import MessagePage from "./pages/MessagePage";
+import ProfilePage from "./pages/ProfilePage";
+import LoginPage from "./pages/LoginPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 export default function App() {
     return (
-        <div className="container relative md:flex md:mx-auto">
-            <Sidebar />
-            <div className="flex-1 flex flex-col">
-                <main className="h-screen px-4 py-4">
-                    <h1>Hello</h1>
-                </main>
-                <Footer />
-            </div>
-            <Message />
-        </div>
+        <>
+            <Routes>
+                <Route element>
+                    <Route path="/login" element={<LoginPage />} />
+                </Route>
+
+                <Route element={<MainLayout />}>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/explore" element={<ExplorePage />} />
+                    <Route path="/message" element={<MessagePage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                </Route>
+
+                <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+        </>
     );
 }

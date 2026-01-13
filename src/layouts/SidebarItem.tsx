@@ -19,14 +19,23 @@ export default function SidebarItem({
 }: SidebarItemProps) {
     const commonClass = cn(
         "flex items-center justify-center lg:justify-start gap-4 p-3 hover:bg-gray-100 rounded-lg transition-all cursor-pointer text-base group w-full",
+        label ? "justify-center lg:justify-start" : "justify-center",
         className
     );
 
     const labelClass = cn(
-        "hidden lg:block",
+        "hidden lg:block whitespace-nowrap",
         !label && "hidden",
         "text-base font-normal"
     );
+
+    const IconComponent = (
+        <Icon
+            size={24}
+            className="group-hover:scale-105 transition-transform shrink-0"
+        />
+    );
+
     if (href) {
         return (
             <NavLink
@@ -38,7 +47,7 @@ export default function SidebarItem({
             >
                 <Icon
                     size={24}
-                    className="group-hover:scale-105 transition-transform"
+                    className="group-hover:scale-105 transition-transform shrink-0"
                 />
                 <span className={labelClass}>{label}</span>
             </NavLink>
@@ -46,10 +55,7 @@ export default function SidebarItem({
     }
     return (
         <div className={commonClass} onClick={onClick} role="button">
-            <Icon
-                size={24}
-                className="group-hover:scale-105 transition-transform focus-visible:ring-0"
-            />
+            {IconComponent}
             <span className={labelClass}>{label}</span>
         </div>
     );

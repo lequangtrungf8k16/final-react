@@ -1,4 +1,7 @@
-import { Button } from "@/components/ui/button";
+import {
+    NativeSelect,
+    NativeSelectOption,
+} from "@/components/ui/native-select";
 import { NavLink } from "react-router-dom";
 
 export default function Footer() {
@@ -49,7 +52,14 @@ export default function Footer() {
                 </NavLink>
             </div>
             <div className="flex items-center gap-4">
-                <Button variant={"ghost"}>English</Button>
+                <NativeSelect className="border-none focus-visible:ring-0">
+                    <NativeSelectOption value="english">
+                        English
+                    </NativeSelectOption>
+                    <NativeSelectOption value="vietnamese">
+                        Vietnamese
+                    </NativeSelectOption>
+                </NativeSelect>
                 <span>© 2026 Instagram from Meta</span>
             </div>
         </footer>

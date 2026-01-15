@@ -31,7 +31,7 @@ export default function ChatWindow() {
                 </div>
             ) : (
                 <div className="relative bg-white border border-gray-200 rounded-xl shadow-lg">
-                    <div className="flex flex-col w-80 h-60 md:h-100">
+                    <div className="flex flex-col w-60 h-full md:w-80 md:h-60 lg:h-100">
                         <div className="w-full flex justify-between items-center p-4 border-b-2 border-b-gray-100">
                             <h3 className="font-bold">Message</h3>
                             <div className="flex gap-4">

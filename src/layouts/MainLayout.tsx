@@ -13,7 +13,7 @@ export default function MainLayout() {
             </div>
 
             <main className="flex-1 z-30 w-full bg-white relative">
-                <div className="flex flex-col w-full min-h-screen">
+                <div className="md:flex flex-col w-full min-h-screen hidden">
                     {/* Hiển thị các trang */}
                     <div className="flex-1 py-4">
                         <Outlet />

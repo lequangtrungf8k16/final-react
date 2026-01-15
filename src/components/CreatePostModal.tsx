@@ -41,8 +41,8 @@ export default function CreatePostModal({
             <DialogContent
                 className={
                     !selectedFile
-                        ? "flex flex-col items-center max-w-100 h-125 rounded-2xl px-0 py-3"
-                        : "flex flex-col items-center max-w-100 h-125 rounded-2xl px-0 py-3 [&>button]:hidden"
+                        ? "flex flex-col items-center w-full h-full md:max-w-100 md:h-125 rounded-2xl px-2 md:px-0 py-3"
+                        : "flex flex-col items-center w-full h-full md:max-w-100 md:h-125 rounded-2xl px-2 md:px-0 py-3 [&>button]:hidden"
                 }
             >
                 <DialogHeader className="w-full border-b-2 border-b-gray-200 pb-3">

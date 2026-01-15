@@ -1,7 +1,6 @@
 import SidebarDropDown from "./SidebarDropDown";
 import { NavLink } from "react-router-dom";
-import { useRef, useState } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useState } from "react";
 import SidebarItem from "./SidebarItem";
 import { cn } from "@/lib/utils";
 

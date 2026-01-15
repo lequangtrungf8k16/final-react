@@ -4,8 +4,8 @@ import { Send, SquarePen } from "lucide-react";
 
 export default function MessagePage() {
     return (
-        <div className="flex min-h-screen">
-            <div className="w-20 md:w-80 flex flex-col gap-4 px-4 py-6 border-r border-r-gray-200 bg-white">
+        <div className="flex w-full h-full">
+            <div className="h-full w-20 md:w-80 flex flex-col gap-4 px-4 py-6 border-r border-r-gray-200 bg-white">
                 <div className="flex justify-center md:justify-between">
                     <h2 className="hidden md:inline">hello</h2>
                     <SquarePen />

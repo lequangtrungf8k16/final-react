@@ -1,7 +1,6 @@
 import SidebarDropDown from "./SidebarDropDown";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
-import SidebarItem from "./SidebarItem";
 import { cn } from "@/lib/utils";
 
 import {
@@ -19,10 +18,14 @@ import {
     Settings,
     SquareActivity,
     MessageCircleQuestionMark,
+    AtSign,
+    Bookmark,
+    MessageSquareWarning,
+    Sun,
 } from "lucide-react";
 
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import CreatePostModal from "@/components/CreatePostModal";
+import SearchContent from "@/components/SearchContent";
 
 const SIDEBAR_ITEM = [
     { type: "link", href: "/", label: "Home", icon: Home },
@@ -54,19 +57,33 @@ const SIDEBAR_ITEM = [
     { type: "link", href: "/profile", label: "Profile", icon: Circle },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+    onOpenCreate: () => void;
+}
+
+export default function Sidebar({ onOpenCreate }: SidebarProps) {
     const [activePanel, setActivePanel] = useState<string | null>(null);
 
-    const handlePanelClick = (panelName: string) => {
-        if (activePanel === panelName) {
+    const [isMoreOpen, setIsMoreOpen] = useState(false);
+    const [isMetaOpen, setIsMetaOpen] = useState(false);
+
+    const handlePanelClick = (item: any) => {
+        if (item.type === "modal") {
+            onOpenCreate();
             setActivePanel(null);
-        } else {
-            setActivePanel(panelName);
+            return;
         }
+        if (item.type === "action" && item.action) {
+            setActivePanel((prev) =>
+                prev === item.action ? null : item.action
+            );
+            return;
+        }
+        setActivePanel(null);
     };
 
     return (
-        <div className="flex z-50 relative">
+        <div className="flex z-50 relative select-none">
             <nav
                 className={`fixed bottom-0 left-0 right-0 z-50 w-full h-20 flex flex-row justify-center items-center bg-white md:sticky md:top-0 md:h-screen md:mx-0 md:flex-col md:border-r-2 md:py-4 transition-all ${
                     activePanel ? "md:w-20 lg:w-20" : "md:w-20 lg:w-60"
@@ -92,35 +109,55 @@ export default function Sidebar() {
                 </NavLink>
 
                 <div className="flex flex-row gap-2 md:w-full md:flex-1 md:flex-col md:mt-10 md:px-4">
-                    {SIDEBAR_ITEM.map((item) => {
-                        if (item.type === "modal" || item.type === "action") {
-                            const actionName =
-                                item.type === "modal" ? "create" : item.action;
+                    {SIDEBAR_ITEM.map((item, index) => {
+                        if (item.type === "link") {
                             return (
-                                <SidebarItem
-                                    label={!activePanel ? item.label : ""}
-                                    icon={item.icon}
-                                    className={`${item.className || ""} ${
-                                        activePanel === actionName
-                                            ? "font-bold bg-gray-100"
-                                            : ""
-                                    }`}
-                                    onClick={() =>
-                                        handlePanelClick(actionName!)
+                                <NavLink
+                                    key={index}
+                                    to={item.href || "!#"}
+                                    onClick={() => handlePanelClick(item)}
+                                    className={({ isActive }) =>
+                                        cn(
+                                            "flex items-center gap-4 p-3 rounded-lg hover:bg-gray-100 transition-all",
+                                            "justify-center lg:justify-start",
+                                            isActive && "font-bold"
+                                        )
                                     }
-                                />
+                                >
+                                    <item.icon size={24} />
+                                    <span
+                                        className={cn(
+                                            "hidden",
+                                            !activePanel && "lg:block"
+                                        )}
+                                    >
+                                        {item.label}
+                                    </span>
+                                </NavLink>
                             );
                         }
 
                         return (
-                            <SidebarItem
-                                key={item.href}
-                                href={item.href}
-                                label={!activePanel ? item.label : ""}
-                                icon={item.icon}
-                                className={item.className || ""}
-                                onClick={() => setActivePanel(null)}
-                            />
+                            <div
+                                key={index}
+                                onClick={() => handlePanelClick(item)}
+                                className={cn(
+                                    "flex items-center gap-4 p-3 rounded-lg hover:bg-gray-100 transition-all cursor-pointer",
+                                    "justify-center lg:justify-start",
+                                    activePanel === item.action &&
+                                        "border border-gray-200"
+                                )}
+                            >
+                                <item.icon size={24} />
+                                <span
+                                    className={cn(
+                                        "hidden",
+                                        !activePanel && "lg:block"
+                                    )}
+                                >
+                                    {item.label}
+                                </span>
+                            </div>
                         );
                     })}
                 </div>
@@ -137,11 +174,14 @@ export default function Sidebar() {
                     <SidebarDropDown
                         icon={Menu}
                         label={!activePanel ? "More" : ""}
-                        className={
+                        open={isMoreOpen}
+                        onOpenChange={setIsMoreOpen}
+                        className={cn(
                             activePanel
                                 ? "lg:justify-center lg:px-0 shrink-0s"
-                                : ""
-                        }
+                                : "",
+                            isMoreOpen && "font-bold"
+                        )}
                     >
                         <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
                             <Settings /> Settings
@@ -149,15 +189,33 @@ export default function Sidebar() {
                         <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
                             <SquareActivity /> Your activity
                         </DropdownMenuItem>
+                        <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
+                            <Bookmark /> Saved
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
+                            <Sun /> Switch appearance
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
+                            <MessageSquareWarning /> Report a problem
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
+                            Switch accounts
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
+                            Logout
+                        </DropdownMenuItem>
                     </SidebarDropDown>
 
                     {/* Network */}
                     <SidebarDropDown
                         icon={Network}
                         label={!activePanel ? "Also from Meta" : ""}
-                        className={
-                            activePanel ? "lg:justify-center shrink-0" : ""
-                        }
+                        open={isMetaOpen}
+                        onOpenChange={setIsMetaOpen}
+                        className={cn(
+                            activePanel ? "lg:justify-center shrink-0 " : "",
+                            isMetaOpen && "font-bold"
+                        )}
                     >
                         <DropdownMenuItem className="flex gap-4 w-60 h-auto p-2 cursor-pointer hover:bg-secondary focus:outline-none">
                             <Circle /> Meta AI
@@ -165,15 +223,12 @@ export default function Sidebar() {
                         <DropdownMenuItem className="flex gap-4 w-60 h-auto p-2 cursor-pointer hover:bg-secondary focus:outline-none">
                             <MessageCircleQuestionMark /> WhatsApp
                         </DropdownMenuItem>
+                        <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
+                            <AtSign /> Threads
+                        </DropdownMenuItem>
                     </SidebarDropDown>
                 </div>
             </nav>
-
-            {/* Create new post */}
-            <CreatePostModal
-                open={activePanel === "create"}
-                onOpenChange={(isOpen) => !isOpen && setActivePanel(null)}
-            />
 
             {/* Nút Tìm kiếm và Thông báo */}
             <div
@@ -187,14 +242,7 @@ export default function Sidebar() {
                     }
                 `}
             >
-                <div className="p-6 h-full flex flex-col">
-                    <h2 className="text-2xl font-bold mb-6">Search</h2>
-                    <input
-                        className="bg-gray-100 px-6 py-2 rounded-full mb-4 focus-visible:ring-0"
-                        placeholder="Search..."
-                    />
-                    <div className="border-t pt-4">Recent</div>
-                </div>
+                <SearchContent />
             </div>
 
             <div

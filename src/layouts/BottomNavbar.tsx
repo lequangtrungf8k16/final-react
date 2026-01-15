@@ -10,25 +10,32 @@ import {
 } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 
-export default function BottomNavbar() {
+interface BottomNavbarProps {
+    onOpenCreate: () => void;
+}
+export default function BottomNavbar({ onOpenCreate }: BottomNavbarProps) {
     return (
         <div className="flex flex-col h-screen w-full relative bg-white">
             {/*Navbar phía trên */}
-            <div className="flex justify-between items-center gap-4 mt-4 px-4">
+            <div className="fixed top-0 left-0 right-0 flex justify-between items-center gap-4 px-4 py-2 bg-white border-b-2 border-b-gray-100">
                 <h2 className="font-bold">Instagram</h2>
                 <div className="flex items-center gap-3 text-gray-600">
                     <SearchInput />
-                    <Heart />
+                    <NavLink to="/notifications">
+                        {({ isActive }) => (
+                            <Heart className={isActive ? "text-black" : ""} />
+                        )}
+                    </NavLink>
                 </div>
             </div>
 
             {/* Nội dung các trang */}
-            <div className="py-4">
+            <div className="flex-1 px-2 py-14">
                 <Outlet />
             </div>
 
             {/* Navbar phía dưới */}
-            <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-evenly items-center gap-4 px-2 py-4 border-t-2 border-t-gray-200">
+            <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-evenly items-center gap-4 px-2 py-4 bg-white border-t-2 border-t-gray-200">
                 <NavLink to={"/"}>
                     <Home />
                 </NavLink>
@@ -38,9 +45,9 @@ export default function BottomNavbar() {
                 <NavLink to={"/reels"}>
                     <SquarePlay />
                 </NavLink>
-                <NavLink to={"/create"}>
+                <div onClick={onOpenCreate} className="cursor-pointer">
                     <Plus />
-                </NavLink>
+                </div>
                 <NavLink to={"/message"}>
                     <Send />
                 </NavLink>

@@ -22,7 +22,7 @@ export default function ChatWindow() {
             {!isOpen ? (
                 <div
                     onClick={() => setIsOpen(true)}
-                    className="p-3 md:w-60 bg-white border border-gray-200 rounded-full shadow-lg cursor-pointer transition-colors hover:bg-gray-100"
+                    className="p-3 md:w-60 bg-white border border-gray-200 rounded-full shadow-lg cursor-pointer transition-colors hover:bg-gray-100 select-none"
                 >
                     <div className="flex gap-4">
                         <Send />

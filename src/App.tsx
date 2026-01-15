@@ -7,6 +7,7 @@ import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ReelsPage from "./pages/ReelsPage";
+import NotificationsPage from "./pages/NotificationsPage";
 
 export default function App() {
     return (
@@ -20,6 +21,10 @@ export default function App() {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/explore" element={<ExplorePage />} />
                     <Route path="/reels" element={<ReelsPage />} />
+                    <Route
+                        path="/notifications"
+                        element={<NotificationsPage />}
+                    />
                     <Route path="/message" element={<MessagePage />} />
                     <Route path="/profile" element={<ProfilePage />} />
                 </Route>

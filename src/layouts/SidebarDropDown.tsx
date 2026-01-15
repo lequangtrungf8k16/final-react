@@ -12,6 +12,8 @@ interface SidebarDropDownProps {
     label: string;
     children: React.ReactNode;
     className?: string;
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
 }
 
 export default function SidebarDropDown({
@@ -19,9 +21,11 @@ export default function SidebarDropDown({
     label,
     children,
     className,
+    open,
+    onOpenChange,
 }: SidebarDropDownProps) {
     return (
-        <DropdownMenu>
+        <DropdownMenu open={open} onOpenChange={onOpenChange}>
             <DropdownMenuTrigger asChild>
                 <button
                     className={cn(
@@ -42,7 +46,7 @@ export default function SidebarDropDown({
                     />
                     <span
                         className={cn(
-                            "hidden lg:inline text-lg text-muted-foreground",
+                            "hidden lg:inline text-lg",
                             !label && "hidden"
                         )}
                     >

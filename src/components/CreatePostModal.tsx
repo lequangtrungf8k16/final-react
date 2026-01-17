@@ -41,8 +41,8 @@ export default function CreatePostModal({
             <DialogContent
                 className={
                     !selectedFile
-                        ? "flex flex-col items-center w-80 h-80 md:max-w-100 md:h-125 rounded-2xl px-2 md:px-0 py-3"
-                        : "flex flex-col items-center w-80 h-80 md:max-w-100 md:h-125 rounded-2xl px-2 md:px-0 py-3 [&>button]:hidden"
+                        ? "flex flex-col items-center w-80 h-80 md:max-w-100 md:h-125 lg:w-240 rounded-2xl px-2 md:px-0 py-3"
+                        : "flex flex-col items-center w-80 h-80 md:max-w-100 md:h-125 lg:w-240 rounded-2xl px-2 md:px-0 py-3 [&>button]:hidden"
                 }
             >
                 <DialogHeader className="w-full border-b-2 border-b-gray-200 pb-3">
@@ -80,14 +80,14 @@ export default function CreatePostModal({
                             />
                             <div className="absolute bottom-2 left-0 right-0 px-4 flex justify-between gap-4">
                                 <div className="flex gap-4">
-                                    <Button>
+                                    <Button className="cursor-pointer">
                                         <Maximize2 size={16} />
                                     </Button>
-                                    <Button>
+                                    <Button className="cursor-pointer">
                                         <ZoomIn size={16} />
                                     </Button>
                                 </div>
-                                <Button>
+                                <Button className="cursor-pointer">
                                     <Copy size={16} />
                                 </Button>
                             </div>

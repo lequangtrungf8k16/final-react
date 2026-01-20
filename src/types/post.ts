@@ -1,18 +1,29 @@
 import type { User } from "./user";
 
 export interface Comment {
-    id: string;
+    _id: string;
+    postId: string;
     content: string;
     user: User;
+    parentCommentId: string | null;
+    likes: number;
+    repliesCount?: number;
     createAt: string;
-    likesCount: number;
 }
 
 export interface Post {
-    id: string;
+    _id: string;
     caption: string;
-    imageUrl: string[];
+
+    image: string;
+    video?: string | null;
+    mediaType: "image" | "video";
+
     user: User;
-    createAt: string;
-    likeCount: number;
+    like: number;
+    comments: number;
+    isLiked?: boolean;
+    isSave?: boolean;
+
+    createdAt: string;
 }

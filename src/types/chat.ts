@@ -1,15 +1,26 @@
 import type { User } from "./user";
 
 export interface Message {
-    id: string;
-    senderId: string;
-    content: string;
-    createAt: string;
+    _id: string;
+    conversationId: string;
+
+    senderId: User;
+    recipientId: string;
+
+    content?: string;
+    imageUrl?: string;
+    messageType: "text" | "image";
+
+    isRead: boolean;
+    createdAt: string;
 }
 
 export interface Conversation {
-    id: string;
+    _id: string;
     participants: User[];
     lastMessage?: Message;
-    updateAt: string;
+    unreadCount: number;
+
+    lastMessageAt: string;
+    createdAt: string;
 }

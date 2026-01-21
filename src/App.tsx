@@ -10,7 +10,7 @@ import ReelsPage from "./pages/ReelsPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { useAppDispatch } from "./store/hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getCurrentUser } from "./store/slices/authSlice";
 import { Toaster } from "sonner";
 import RegisterPage from "./pages/RegisterPage";
@@ -18,13 +18,28 @@ import VerifyEmailPage from "./pages/VerifyEmailPage";
 
 export default function App() {
     const dispatch = useAppDispatch();
+    const [isCheckingToken, setCheckingToken] = useState(true);
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
         if (token) {
-            dispatch(getCurrentUser());
+            dispatch(getCurrentUser())
+                .unwrap()
+                .finally(() => {
+                    setCheckingToken(false);
+                });
+        } else {
+            setCheckingToken(false);
         }
     }, [dispatch]);
+
+    if (isCheckingToken) {
+        return (
+            <div className="flex justify-center items-center h-screen bg-gray-50">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -33,13 +48,12 @@ export default function App() {
             <Routes>
                 {/* Public */}
                 <Route>
-                    <Route
-                        path="/"
-                        element={<Navigate to="/login" replace />}
-                    />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/login" element={<LoginPage />} />
-                    <Route path="/verify" element={<VerifyEmailPage />} />
+                    <Route
+                        path="/verify-email/:token"
+                        element={<VerifyEmailPage />}
+                    />
                 </Route>
 
                 {/* Private */}

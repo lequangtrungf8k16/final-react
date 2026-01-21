@@ -11,9 +11,9 @@ export interface LoginData {
 export interface RegisterPayload {
     email: string;
     username: string;
-    fullname: string;
     password: string;
     confirmPassword: string;
+    fullname: string;
 }
 
 // Thông tin gửi khi Login

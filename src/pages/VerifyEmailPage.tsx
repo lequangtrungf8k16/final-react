@@ -1,20 +1,20 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { verifyEmail } from "@/store/slices/authSlice";
 import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function VerifyEmailPage() {
     const navigate = useNavigate();
-    const location = useLocation();
     const dispatch = useAppDispatch();
 
-    const { email, password, token } = location.state || {};
+    const { token } = useParams<{ token: string }>();
 
     const { isLoading, error } = useAppSelector((state) => state.auth);
 
     useEffect(() => {
         if (!token) {
+            toast.error("Invalid authentication link");
             navigate("/register");
         }
     }, [token, navigate]);
@@ -23,14 +23,11 @@ export default function VerifyEmailPage() {
         if (!token) return;
         try {
             await dispatch(verifyEmail(token)).unwrap();
-            toast.success("Verify success");
+            toast.success("Verification successful! Please log in");
 
-            navigate("/login", {
-                state: {
-                    email: email,
-                    password: password,
-                },
-            });
+            setTimeout(() => {
+                navigate("/login");
+            }, 1000);
         } catch (error) {
             console.error(error);
         }
@@ -43,7 +40,8 @@ export default function VerifyEmailPage() {
             <div className="p-8 bg-white rounded-2xl shadow-md w-96 text-center">
                 <h2 className="text-xl font-bold mb-4">Verify Email</h2>
                 <p className="text-sm text-gray-500 mb-4">
-                    Verify Email Please: <b>{email}</b>
+                    The system has recorded the verification code from your
+                    email
                 </p>
 
                 <div className="bg-gray-100 p-3 rounded border font-mono text-blue-600 font-bold mb-6 break-all">

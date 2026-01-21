@@ -3,30 +3,40 @@ import {
     createAsyncThunk,
     type PayloadAction,
 } from "@reduxjs/toolkit";
-import type {
-    AuthState,
-    LoginData,
-    LoginPayload,
-    RegisterPayload,
-} from "@/types";
+import type { LoginPayload, RegisterPayload } from "@/types";
 import { authService } from "@/services/authService";
 import type { User } from "@/types";
-import { tr } from "zod/v4/locales";
+
+interface LoginResponse {
+    user: User;
+    tokens: {
+        accessToken: string;
+        refreshToken: string;
+    };
+}
+
+interface AuthState {
+    user: User | null;
+    accessToken: string | null;
+    isAuthenticated: boolean;
+    isLoading: boolean;
+    error: string | null;
+}
 
 const initialState: AuthState = {
     user: null,
-    isAuthenticated: false,
+    accessToken: localStorage.getItem("accessToken"),
+    isAuthenticated: !!localStorage.getItem("accessToken"),
     isLoading: false,
     error: null,
-    accessToken: localStorage.getItem("accessToken"),
 };
 
-export const loginUser = createAsyncThunk<LoginData, LoginPayload>(
+export const loginUser = createAsyncThunk<LoginResponse, LoginPayload>(
     "auth/login",
     async (payload, { rejectWithValue }) => {
         try {
             const response = await authService.login(payload);
-            return response.data.data;
+            return response.data as unknown as LoginResponse;
         } catch (error: any) {
             return rejectWithValue(
                 error.response?.data?.message || "Login failed",
@@ -105,15 +115,24 @@ const authSlice = createSlice({
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isAuthenticated = true;
-                state.user = action.payload.user;
-                state.accessToken = action.payload.accessToken;
+                const data = action.payload;
+                if (data?.user) {
+                    state.user = data.user;
+                }
+                if (data?.tokens?.accessToken) {
+                    state.accessToken = data.tokens.accessToken;
 
-                localStorage.setItem("accessToken", action.payload.accessToken);
-                if (action.payload.refreshToken) {
                     localStorage.setItem(
                         "accessToken",
-                        action.payload.refreshToken,
+                        data.tokens.accessToken,
                     );
+
+                    if (data.tokens.refreshToken) {
+                        localStorage.setItem(
+                            "refreshToken",
+                            data.tokens.refreshToken,
+                        );
+                    }
                 }
             })
             .addCase(loginUser.rejected, (state, action) => {
@@ -131,15 +150,13 @@ const authSlice = createSlice({
                 state.error = action.payload as string;
             })
             .addCase(getCurrentUser.pending, (state) => {
-                state.isLoading = true;
+                console.log(state);
             })
             .addCase(getCurrentUser.fulfilled, (state, action) => {
-                state.isLoading = false;
                 state.isAuthenticated = true;
                 state.user = action.payload;
             })
             .addCase(getCurrentUser.rejected, (state) => {
-                state.isLoading = false;
                 state.isAuthenticated = false;
                 state.user = null;
                 localStorage.removeItem("accessToken");

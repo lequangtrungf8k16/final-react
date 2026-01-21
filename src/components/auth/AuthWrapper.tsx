@@ -17,7 +17,7 @@ export default function AuthWrapper({
     const isRegister = location.pathname === "/register";
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-50">
+        <div className="flex justify-center items-center min-h-screen px4 bg-gray-50">
             <div className="bg-white rounded-2xl shadow-xl w-100 overflow-hidden">
                 <div className="pt-8 px-8 pb-4 text-center">
                     <h1 className="text-3xl font-bold text-gray-800 mb-2">

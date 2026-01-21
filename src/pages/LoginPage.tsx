@@ -30,7 +30,7 @@ export default function LoginPage() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            navigate("/");
+            navigate("/", { replace: true });
         }
     }, [isAuthenticated, navigate]);
 
@@ -38,13 +38,18 @@ export default function LoginPage() {
         dispatch(loginUser(data));
     };
 
+    const handleNavigateToRegister = () => {
+        navigate("/register");
+    };
+
     return (
         <AuthWrapper title="Login" subTitle="">
-            {error && <div>{error}</div>}
             <LoginForm
                 onSubmit={handleLogin}
                 isLoading={isLoading}
                 defaultValues={initialData}
+                rootError={error}
+                onRegister={handleNavigateToRegister}
             />
         </AuthWrapper>
     );

@@ -6,8 +6,10 @@ interface SidebarItemProps {
     href?: string;
     label: string;
     icon: LucideIcon;
-    className: string;
+    className?: string;
     onClick?: () => void;
+    isActivePanel?: boolean;
+    hideLabel?: boolean;
 }
 
 export default function SidebarItem({
@@ -16,17 +18,21 @@ export default function SidebarItem({
     icon: Icon,
     className,
     onClick,
+    isActivePanel,
+    hideLabel,
 }: SidebarItemProps) {
     const commonClass = cn(
-        "flex items-center justify-center lg:justify-start gap-4 p-3 hover:bg-gray-100 rounded-lg transition-all cursor-pointer text-base group w-full",
-        label ? "justify-center lg:justify-start" : "justify-center",
-        className
+        "flex items-center transition-all duration-300 rounded-lg cursor-pointer group hover:bg-gray-100",
+        hideLabel
+            ? "w-12 h-12 justify-center p-0 mx-auto"
+            : "w-full justify-start p-3 mx-0",
+
+        className,
     );
 
     const labelClass = cn(
-        "hidden lg:block whitespace-nowrap",
-        !label && "hidden",
-        "text-base font-normal"
+        "whitespace-nowrap text-base font-normal transition-all duration-200",
+        !hideLabel && label ? "hidden lg:block" : "hidden",
     );
 
     const IconComponent = (
@@ -41,20 +47,27 @@ export default function SidebarItem({
             <NavLink
                 to={href}
                 className={({ isActive }) =>
-                    cn(commonClass, isActive && "font-bold bg-gray-100")
+                    cn(
+                        commonClass,
+                        (isActive || isActivePanel) && "font-bold bg-gray-100",
+                    )
                 }
                 onClick={onClick}
             >
-                <Icon
-                    size={24}
-                    className="group-hover:scale-105 transition-transform shrink-0"
-                />
+                {IconComponent}
                 <span className={labelClass}>{label}</span>
             </NavLink>
         );
     }
     return (
-        <div className={commonClass} onClick={onClick} role="button">
+        <div
+            className={cn(
+                commonClass,
+                isActivePanel && "font-bold border border-gray-200 bg-gray-100",
+            )}
+            onClick={onClick}
+            role="button"
+        >
             {IconComponent}
             <span className={labelClass}>{label}</span>
         </div>

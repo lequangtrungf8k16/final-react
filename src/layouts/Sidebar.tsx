@@ -17,22 +17,31 @@ import {
     Network,
     Settings,
     SquareActivity,
-    MessageCircleQuestionMark,
     AtSign,
     Bookmark,
     MessageSquareWarning,
     Sun,
+    LogOut,
 } from "lucide-react";
 
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import SearchContent from "@/components/SearchContent";
+import SidebarItem from "./SidebarItem";
 
-const SIDEBAR_ITEM = [
+type SidebarItemType = {
+    type: "link" | "action" | "modal";
+    href?: string;
+    label: string;
+    icon: any;
+    action?: string;
+    className?: string;
+};
+
+const SIDEBAR_ITEMS: SidebarItemType[] = [
     { type: "link", href: "/", label: "Home", icon: Home },
     {
         type: "action",
         action: "search",
-        href: "/search",
         label: "Search",
         icon: Search,
         className: "hidden md:flex",
@@ -43,14 +52,12 @@ const SIDEBAR_ITEM = [
     {
         type: "action",
         action: "notifications",
-        href: "/notifications",
         label: "Notifications",
         icon: Heart,
         className: "hidden md:flex",
     },
     {
         type: "modal",
-        href: "/create",
         label: "Create",
         icon: Plus,
     },
@@ -67,7 +74,7 @@ export default function Sidebar({ onOpenCreate }: SidebarProps) {
     const [isMoreOpen, setIsMoreOpen] = useState(false);
     const [isMetaOpen, setIsMetaOpen] = useState(false);
 
-    const handlePanelClick = (item: any) => {
+    const handlePanelClick = (item: SidebarItemType) => {
         if (item.type === "modal") {
             onOpenCreate();
             setActivePanel(null);
@@ -75,156 +82,108 @@ export default function Sidebar({ onOpenCreate }: SidebarProps) {
         }
         if (item.type === "action" && item.action) {
             setActivePanel((prev) =>
-                prev === item.action ? null : item.action
+                prev === item.action ? null : (item.action as string),
             );
             return;
         }
         setActivePanel(null);
     };
 
+    const sidebarWidthClass = activePanel ? "lg:w-20" : "lg:w-64";
+
     return (
         <div className="flex z-50 relative select-none">
             <nav
-                className={`fixed bottom-0 left-0 right-0 z-50 w-full h-20 flex flex-row justify-center items-center bg-white md:sticky md:top-0 md:h-screen md:mx-0 md:flex-col md:border-r-2 md:py-4 transition-all ${
-                    activePanel ? "md:w-20 lg:w-20" : "md:w-20 lg:w-60"
-                }`}
+                className={cn(
+                    "fixed bottom-0 left-0 right-0 z-50 bg-white border-t",
+                    "md:sticky md:top-0 md:h-screen md:border-r md:border-t-0 md:flex md:flex-col md:py-4 transition-all duration-300",
+                    "w-full md:w-20",
+                    sidebarWidthClass,
+                )}
             >
-                <NavLink
-                    to={"/"}
-                    className="hidden mx-auto md:flex w-full justify-center"
-                >
-                    <h1
-                        className={`text-2xl font-bold transition-all ${
-                            activePanel ? "hidden" : "hidden lg:block"
-                        }`}
-                    >
-                        Instagram
-                    </h1>
-                    <Instagram
-                        className={cn(
-                            "hidden sm:inline sm:mt-2 transition-all",
-                            activePanel ? "lg:block" : "lg:hidden"
-                        )}
-                    />
-                </NavLink>
-
-                <div className="flex flex-row gap-2 md:w-full md:flex-1 md:flex-col md:mt-10 md:px-4">
-                    {SIDEBAR_ITEM.map((item, index) => {
-                        if (item.type === "link") {
-                            return (
-                                <NavLink
-                                    key={index}
-                                    to={item.href || "!#"}
-                                    onClick={() => handlePanelClick(item)}
-                                    className={({ isActive }) =>
-                                        cn(
-                                            "flex items-center gap-4 p-3 rounded-lg hover:bg-gray-100 transition-all",
-                                            "justify-center lg:justify-start",
-                                            isActive && "font-bold"
-                                        )
-                                    }
-                                >
-                                    <item.icon size={24} />
-                                    <span
-                                        className={cn(
-                                            "hidden",
-                                            !activePanel && "lg:block"
-                                        )}
-                                    >
-                                        {item.label}
-                                    </span>
-                                </NavLink>
-                            );
-                        }
-
-                        return (
-                            <div
-                                key={index}
-                                onClick={() => handlePanelClick(item)}
-                                className={cn(
-                                    "flex items-center gap-4 p-3 rounded-lg hover:bg-gray-100 transition-all cursor-pointer",
-                                    "justify-center lg:justify-start",
-                                    activePanel === item.action &&
-                                        "border border-gray-200"
-                                )}
-                            >
-                                <item.icon size={24} />
-                                <span
-                                    className={cn(
-                                        "hidden",
-                                        !activePanel && "lg:block"
-                                    )}
-                                >
-                                    {item.label}
-                                </span>
-                            </div>
-                        );
-                    })}
-                </div>
-
-                {/* Phần dưới Sidebar */}
                 <div
                     className={cn(
-                        "hidden px-4 md:w-full md:flex md:flex-col lg:justify-start md:items-center gap-4 mt-10",
-                        "md:items-center",
-                        activePanel ? "items-center" : "lg:items-start"
+                        "hidden md:flex mb-8 px-4 h-10 items-center",
+                        activePanel
+                            ? "justify-center"
+                            : "justify-center lg:justify-start",
                     )}
                 >
-                    {/* Menu */}
+                    <NavLink to="/" className="block">
+                        <h1
+                            className={cn(
+                                "text-2xl font-bold italic transition-all",
+                                activePanel ? "hidden" : "hidden lg:block",
+                            )}
+                        >
+                            Instagram
+                        </h1>
+                        <Instagram
+                            className={cn(
+                                "transition-all h-6! w-6!",
+                                activePanel ? "block" : "lg:hidden block",
+                            )}
+                        />
+                    </NavLink>
+                </div>
+
+                <div className="flex flex-row justify-around w-full md:flex-col md:space-y-2 md:px-3 md:flex-1">
+                    {SIDEBAR_ITEMS.map((item, index) => (
+                        <SidebarItem
+                            key={index}
+                            href={item.href}
+                            label={item.label}
+                            icon={item.icon}
+                            className={item.className}
+                            onClick={() => handlePanelClick(item)}
+                            isActivePanel={activePanel === item.action}
+                            hideLabel={!!activePanel}
+                        />
+                    ))}
+                </div>
+
+                <div className="hidden md:flex flex-col gap-2 px-3 mt-auto">
+                    {/* Threads / Meta Button */}
+                    <SidebarDropDown
+                        icon={Network}
+                        label={!activePanel ? "Threads" : ""}
+                        open={isMetaOpen}
+                        onOpenChange={setIsMetaOpen}
+                        hideLabel={!!activePanel}
+                    >
+                        <DropdownMenuItem className="cursor-pointer">
+                            <AtSign className="mr-2 h-4 w-4" /> Threads
+                        </DropdownMenuItem>
+                    </SidebarDropDown>
+
+                    {/* More Menu Button */}
                     <SidebarDropDown
                         icon={Menu}
                         label={!activePanel ? "More" : ""}
                         open={isMoreOpen}
                         onOpenChange={setIsMoreOpen}
-                        className={cn(
-                            activePanel
-                                ? "lg:justify-center lg:px-0 shrink-0s"
-                                : "",
-                            isMoreOpen && "font-bold"
-                        )}
+                        hideLabel={!!activePanel}
                     >
-                        <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
-                            <Settings /> Settings
+                        <DropdownMenuItem className="cursor-pointer">
+                            <Settings className="mr-2 h-4 w-4" /> Settings
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
-                            <SquareActivity /> Your activity
+                        <DropdownMenuItem className="cursor-pointer">
+                            <SquareActivity className="mr-2 h-4 w-4" /> Your
+                            activity
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
-                            <Bookmark /> Saved
+                        <DropdownMenuItem className="cursor-pointer">
+                            <Bookmark className="mr-2 h-4 w-4" /> Saved
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
-                            <Sun /> Switch appearance
+                        <DropdownMenuItem className="cursor-pointer">
+                            <Sun className="mr-2 h-4 w-4" /> Switch appearance
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
-                            <MessageSquareWarning /> Report a problem
+                        <DropdownMenuItem className="cursor-pointer">
+                            <MessageSquareWarning className="mr-2 h-4 w-4" />{" "}
+                            Report a problem
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
-                            Switch accounts
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
-                            Logout
-                        </DropdownMenuItem>
-                    </SidebarDropDown>
-
-                    {/* Network */}
-                    <SidebarDropDown
-                        icon={Network}
-                        label={!activePanel ? "Also from Meta" : ""}
-                        open={isMetaOpen}
-                        onOpenChange={setIsMetaOpen}
-                        className={cn(
-                            activePanel ? "lg:justify-center shrink-0 " : "",
-                            isMetaOpen && "font-bold"
-                        )}
-                    >
-                        <DropdownMenuItem className="flex gap-4 w-60 h-auto p-2 cursor-pointer hover:bg-secondary focus:outline-none">
-                            <Circle /> Meta AI
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="flex gap-4 w-60 h-auto p-2 cursor-pointer hover:bg-secondary focus:outline-none">
-                            <MessageCircleQuestionMark /> WhatsApp
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="flex gap-4 w-60 p-2 cursor-pointer hover:bg-secondary focus:outline-none">
-                            <AtSign /> Threads
+                        <div className="h-px bg-gray-200 my-1" />
+                        <DropdownMenuItem className="cursor-pointer text-red-500 font-medium">
+                            <LogOut className="mr-2 h-4 w-4" /> Log out
                         </DropdownMenuItem>
                     </SidebarDropDown>
                 </div>
@@ -232,34 +191,31 @@ export default function Sidebar({ onOpenCreate }: SidebarProps) {
 
             {/* Nút Tìm kiếm và Thông báo */}
             <div
-                className={`
-                    fixed top-0 left-0 h-full bg-white z-30 shadow-2xl border-r border-gray-200
-                    w-100 transition-transform duration-300 ease-in-out
-                    ${
-                        activePanel === "search"
-                            ? "translate-x-18"
-                            : "-translate-x-full"
-                    }
-                `}
+                className={cn(
+                    "fixed top-0 left-0 h-full bg-white z-40 shadow-2xl border-r border-gray-200 transition-transform duration-300 ease-in-out w-99",
+                    activePanel === "search"
+                        ? "translate-x-17 md:translate-x-18"
+                        : "-translate-x-full",
+                )}
             >
                 <SearchContent />
             </div>
 
+            {/* Notification Panel */}
             <div
-                className={`
-                    fixed top-0 left-0 h-full bg-white z-30 shadow-2xl border-r border-gray-200
-                    w-100 transition-transform duration-300 ease-in-out
-                    ${
-                        activePanel === "notifications"
-                            ? "translate-x-18"
-                            : "-translate-x-full"
-                    }
-                `}
+                className={cn(
+                    "fixed top-0 left-0 h-full bg-white z-40 shadow-2xl border-r border-gray-200 transition-transform duration-300 ease-in-out w-99",
+                    activePanel === "notifications"
+                        ? "translate-x-17 md:translate-x-18"
+                        : "-translate-x-full",
+                )}
             >
-                <div className="p-6 h-full flex flex-col focus-visible:ring-0">
+                <div className="p-6 h-full flex flex-col">
                     <h2 className="text-2xl font-bold mb-6">Notifications</h2>
                     <div className="flex flex-col gap-4">
-                        <div>Empty</div>
+                        <div className="text-gray-500 text-sm">
+                            No new notifications.
+                        </div>
                     </div>
                 </div>
             </div>

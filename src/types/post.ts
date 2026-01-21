@@ -1,29 +1,56 @@
 import type { User } from "./user";
 
+export interface Pagination {
+    currentPage: number;
+    totalPages: number;
+    totalPosts?: number;
+    totalItems?: number;
+    hasMore: boolean;
+}
 export interface Comment {
     _id: string;
     postId: string;
+    userId: User;
+
     content: string;
-    user: User;
     parentCommentId: string | null;
     likes: number;
     repliesCount?: number;
-    createAt: string;
+    createdAt: string;
+    updatedAt?: string;
 }
 
 export interface Post {
     _id: string;
-    caption: string;
+    caption?: string;
 
     image: string;
     video?: string | null;
     mediaType: "image" | "video";
 
-    user: User;
-    like: number;
+    userId: User;
+
+    likes: number;
     comments: number;
+
     isLiked?: boolean;
-    isSave?: boolean;
+    isSaved?: boolean;
 
     createdAt: string;
+    updatedAt?: string;
+}
+
+export interface PostsResponse {
+    success: boolean;
+    message: string;
+    data: {
+        posts: Post[];
+        pagination: Pagination;
+    };
+}
+
+export interface PostDetailResponse {
+    success: boolean;
+    message: string;
+    data: Post;
 }

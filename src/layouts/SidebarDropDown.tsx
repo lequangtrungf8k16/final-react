@@ -1,4 +1,3 @@
-import { buttonVariants } from "@/components/ui/button";
 import {
     DropdownMenuTrigger,
     DropdownMenu,
@@ -14,6 +13,7 @@ interface SidebarDropDownProps {
     className?: string;
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
+    hideLabel?: boolean;
 }
 
 export default function SidebarDropDown({
@@ -23,31 +23,33 @@ export default function SidebarDropDown({
     className,
     open,
     onOpenChange,
+    hideLabel,
 }: SidebarDropDownProps) {
     return (
         <DropdownMenu open={open} onOpenChange={onOpenChange}>
             <DropdownMenuTrigger asChild>
                 <button
+                    type="button"
                     className={cn(
-                        buttonVariants({ variant: "ghost", size: "lg" }),
-                        "md:mx-auto lg:w-full lg:p-4 lg:flex lg:justify-start lg:gap-2 cursor-pointer transition-all focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none",
-                        label
-                            ? "w-full justify-center px-4 py-2 md:mx-0"
-                            : "w-12 h-12 justify-center p-0 md:mx-auto",
-                        className
+                        "flex items-center transition-all duration-300 rounded-lg cursor-pointer group hover:bg-gray-100 outline-none focus-visible:ring-0",
+                        hideLabel
+                            ? "w-12 h-12 justify-center p-0 mx-auto"
+                            : "w-full justify-start p-3 mx-0",
+
+                        className,
                     )}
                 >
                     <Icon
                         size={24}
                         className={cn(
-                            "transition-all shrink-0",
-                            label ? "h-6! w-6!" : "h-6! w-6!"
+                            "transition-all shrink-0 group-hover:scale-105",
+                            "h-6! w-6!",
                         )}
                     />
                     <span
                         className={cn(
-                            "hidden lg:inline text-lg",
-                            !label && "hidden"
+                            "whitespace-nowrap text-base font-normal transition-all duration-200",
+                            !hideLabel && label ? "hidden lg:block" : "hidden",
                         )}
                     >
                         {label}
@@ -55,7 +57,7 @@ export default function SidebarDropDown({
                 </button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent side="top" align="start" alignOffset={20}>
+            <DropdownMenuContent side="top" align="start" className="w-60 ml-4">
                 {children}
             </DropdownMenuContent>
         </DropdownMenu>

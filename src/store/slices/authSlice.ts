@@ -107,9 +107,6 @@ const authSlice = createSlice({
             state.user = action.payload;
             state.isAuthenticated = true;
         },
-        clearError: (state) => {
-            state.error = null;
-        },
     },
 
     extraReducers: (builder) => {
@@ -147,10 +144,6 @@ const authSlice = createSlice({
                 state.isLoading = false;
                 state.isAuthenticated = false;
                 state.error = action.payload as string;
-
-                state.accessToken = null;
-                localStorage.removeItem("accessToken");
-                localStorage.removeItem("refreshToken");
             })
             // Xử lý Register
             .addCase(registerUser.pending, (state) => {
@@ -189,5 +182,5 @@ const authSlice = createSlice({
     },
 });
 
-export const { logout, setUser, clearError } = authSlice.actions;
+export const { logout, setUser } = authSlice.actions;
 export default authSlice.reducer;

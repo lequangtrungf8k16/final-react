@@ -2,7 +2,6 @@ import AuthWrapper from "@/components/auth/AuthWrapper";
 import LoginForm from "@/components/auth/LoginForm";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { loginUser } from "@/store/slices/authSlice";
-import { clearError } from "@/store/slices/authSlice";
 import type { LoginPayload } from "@/types";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -21,14 +20,12 @@ export default function LoginPage() {
     );
 
     useEffect(() => {
-        if (isAuthenticated) {
+        console.log("Check Auth:", { isAuthenticated, isLoading, error });
+
+        if (isAuthenticated && !error && !isLoading) {
             navigate("/", { replace: true });
         }
-    }, [isAuthenticated, navigate]);
-
-    useEffect(() => {
-        dispatch(clearError());
-    }, [dispatch]);
+    }, [isAuthenticated, navigate, error, isLoading]);
 
     useEffect(() => {
         if (location.state?.email && location.state?.password) {
@@ -40,12 +37,12 @@ export default function LoginPage() {
     }, [location.state]);
 
     const handleLogin = async (data: LoginPayload) => {
-        try {
-            await dispatch(loginUser(data)).unwrap();
+        const resultAction = await dispatch(loginUser(data));
 
-            navigate("/", { replace: true });
-        } catch (error: any) {
-            console.log("Login Failed:", error);
+        if (loginUser.fulfilled.match(resultAction)) {
+            console.log("Login success");
+        } else {
+            console.log("Login failed:", resultAction.payload);
         }
     };
 

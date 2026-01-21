@@ -107,6 +107,9 @@ const authSlice = createSlice({
             state.user = action.payload;
             state.isAuthenticated = true;
         },
+        clearError: (state) => {
+            state.error = null;
+        },
     },
 
     extraReducers: (builder) => {
@@ -119,31 +122,35 @@ const authSlice = createSlice({
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.isAuthenticated = true;
+
                 const data = action.payload;
-                if (data?.user) {
-                    state.user = data.user;
-                }
                 if (data?.tokens?.accessToken) {
+                    state.isAuthenticated = true;
                     state.accessToken = data.tokens.accessToken;
+                    state.user = data.user;
 
                     localStorage.setItem(
                         "accessToken",
                         data.tokens.accessToken,
                     );
-
                     if (data.tokens.refreshToken) {
                         localStorage.setItem(
                             "refreshToken",
                             data.tokens.refreshToken,
                         );
                     }
+                } else {
+                    state.isAuthenticated = false;
                 }
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isAuthenticated = false;
                 state.error = action.payload as string;
+
+                state.accessToken = null;
+                localStorage.removeItem("accessToken");
+                localStorage.removeItem("refreshToken");
             })
             // Xử lý Register
             .addCase(registerUser.pending, (state) => {
@@ -182,5 +189,5 @@ const authSlice = createSlice({
     },
 });
 
-export const { logout, setUser } = authSlice.actions;
+export const { logout, setUser, clearError } = authSlice.actions;
 export default authSlice.reducer;

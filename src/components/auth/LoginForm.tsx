@@ -89,7 +89,7 @@ export default function LoginForm({
                     <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer hover:text-gray-700"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer hover:text-gray-700 select-none"
                     >
                         {showPassword ? (
                             <EyeOff size={20} />
@@ -108,7 +108,7 @@ export default function LoginForm({
             <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 cursor-pointer transition-all"
+                className="w-full p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 cursor-pointer transition-all select-none"
             >
                 {isLoading ? "Loading..." : "Login"}
             </button>
@@ -119,7 +119,7 @@ export default function LoginForm({
                     <button
                         type="button"
                         onClick={onRegister}
-                        className="text-blue-500 font-medium hover:underline cursor-pointer"
+                        className="text-blue-500 font-medium hover:underline cursor-pointer select-none"
                     >
                         Register now
                     </button>

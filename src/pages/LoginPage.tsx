@@ -29,13 +29,21 @@ export default function LoginPage() {
     }, [location.state]);
 
     useEffect(() => {
+        console.log("Check Auth:", { isAuthenticated, isLoading, error });
+
         if (isAuthenticated) {
             navigate("/", { replace: true });
         }
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated, navigate, error, isLoading]);
 
-    const handleLogin = (data: LoginPayload) => {
-        dispatch(loginUser(data));
+    const handleLogin = async (data: LoginPayload) => {
+        const resultAction = await dispatch(loginUser(data));
+
+        if (loginUser.fulfilled.match(resultAction)) {
+            console.log("Login success directly");
+        } else {
+            console.log("Login failed directly:", resultAction.payload);
+        }
     };
 
     const handleNavigateToRegister = () => {

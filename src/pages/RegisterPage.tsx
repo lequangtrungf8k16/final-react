@@ -83,14 +83,14 @@ export default function RegisterPage() {
 
                     <button
                         onClick={handleOpenMail}
-                        className="w-full bg-blue-600 text-white font-medium p-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                        className="w-full bg-blue-600 text-white font-medium p-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 select-none"
                     >
                         Open Your Mailbox nơư <ArrowRight size={18} />
                     </button>
 
                     <button
                         onClick={() => navigate("/login")}
-                        className="text-blue-600 text-sm hover:underline font-medium"
+                        className="text-blue-600 text-sm hover:underline font-medium select-none"
                     >
                         Verify, Login now
                     </button>
@@ -172,7 +172,7 @@ export default function RegisterPage() {
                         <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer hover:text-gray-700"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer hover:text-gray-700 select-none"
                         >
                             {showPassword ? (
                                 <EyeOff size={20} />
@@ -210,7 +210,7 @@ export default function RegisterPage() {
                             onClick={() =>
                                 setShowConfirmPassword(!showConfirmPassword)
                             }
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer hover:text-gray-700"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer hover:text-gray-700 select-none"
                         >
                             {showConfirmPassword ? (
                                 <EyeOff size={20} />
@@ -230,7 +230,7 @@ export default function RegisterPage() {
                 <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-blue-600 text-white p-3 rounded-lg cursor-pointer hover:bg-blue-700 disabled:bg-gray-400"
+                    className="w-full bg-blue-600 text-white p-3 rounded-lg cursor-pointer hover:bg-blue-700 disabled:bg-gray-400 select-none"
                 >
                     {isLoading ? "Loading..." : "Register"}
                 </button>

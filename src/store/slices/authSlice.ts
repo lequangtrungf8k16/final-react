@@ -52,9 +52,13 @@ export const registerUser = createAsyncThunk<any, RegisterPayload>(
             const response = await authService.register(payload);
             return response.data.data;
         } catch (error: any) {
-            return rejectWithValue(
-                error.response?.data?.message || "Registration failed",
-            );
+            if (error.response && error.response.data) {
+                return rejectWithValue(
+                    error.response.data.message || "Login failed",
+                );
+            } else {
+                return rejectWithValue(error.message);
+            }
         }
     },
 );
@@ -111,6 +115,7 @@ const authSlice = createSlice({
             .addCase(loginUser.pending, (state) => {
                 state.isLoading = true;
                 state.error = null;
+                state.isAuthenticated = false;
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.isLoading = false;

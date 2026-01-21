@@ -17,12 +17,13 @@ export default function AuthWrapper({
     const isRegister = location.pathname === "/register";
 
     return (
-        <div className="flex justify-center items-center min-h-screen px4 bg-gray-50">
+        <div className="flex flex-col gap-4 justify-center items-center min-h-screen px4 bg-gray-50">
+            <h1 className="text-4xl font-bold">Instagram</h1>
             <div className="bg-white rounded-2xl shadow-xl w-100 overflow-hidden">
                 <div className="pt-8 px-8 pb-4 text-center">
-                    <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                    <h2 className="text-3xl font-bold text-gray-800 mb-2">
                         {title}
-                    </h1>
+                    </h2>
                     {subTitle && (
                         <p className="text-gray-500 text-sm">{subTitle}</p>
                     )}

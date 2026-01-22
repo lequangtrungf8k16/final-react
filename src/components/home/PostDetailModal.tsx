@@ -185,7 +185,23 @@ export default function PostDetailModal({
             )}
 
             {comments.map((comment, index) => {
-              const isMyComment = currentUser?._id === comment.userId?._id;
+              const myId = currentUser?._id;
+
+              const creatorId =
+                comment.userId && typeof comment.userId === "object"
+                  ? comment.userId._id
+                  : comment.userId;
+
+              const isMyComment =
+                myId && creatorId && myId.toString() === creatorId.toString();
+
+              if (index === 0) {
+                console.log("🔍 DEBUG CHECK QUYỀN:", {
+                  MyID: myId,
+                  CreatorID: creatorId,
+                  Match: isMyComment,
+                });
+              }
 
               return (
                 <div

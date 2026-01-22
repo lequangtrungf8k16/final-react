@@ -59,13 +59,34 @@ export const registerUser = createAsyncThunk<any, RegisterPayload>(
   },
 );
 
+// Trong src/store/slices/authSlice.ts
+
 export const getCurrentUser = createAsyncThunk<User>(
   "auth/getCurrentUser",
   async (_, { rejectWithValue }) => {
     try {
       const response = await authService.getCurrentUser();
-      return response.data.data;
+
+      // 🔥 DEBUG: Xem API thực sự trả về cái gì
+      console.log("🔥 API getCurrentUser Response:", response);
+
+      // Xử lý linh hoạt các trường hợp response
+      const resData = response as any;
+
+      // Trường hợp 1: Axios trả về full response -> data -> data (Chuẩn theo API doc)
+      if (resData.data && resData.data.data) {
+        return resData.data.data;
+      }
+
+      // Trường hợp 2: Service đã bóc tách, hoặc API trả trực tiếp data
+      if (resData.data) {
+        return resData.data;
+      }
+
+      // Trường hợp 3: response chính là user object
+      return resData;
     } catch (error: any) {
+      console.error("❌ Lỗi getCurrentUser:", error);
       return rejectWithValue(
         error.response?.data?.message || "Get profile failed",
       );

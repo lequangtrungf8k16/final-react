@@ -111,7 +111,7 @@ export default function PostDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-5xl w-[95vw] md:w-full p-0 gap-0 overflow-hidden h-[80vh] md:h-[85vh] flex flex-col md:flex-row bg-white dark:bg-black border dark:border-gray-800 rounded-lg z-100 outline-none">
+      <DialogContent className="sm:max-w-5xl w-[95vw] md:w-full p-0 gap-0 overflow-hidden h-[80vh] md:h-[85vh] flex flex-col md:flex-row bg-white dark:bg-black border dark:border-gray-800 rounded-lg z-100 outline-none [&>button:not(.custom-close)]:hidden">
         <DialogTitle className="hidden">Post Detail</DialogTitle>
         <button
           onClick={onClose}
@@ -316,7 +316,7 @@ export default function PostDetailModal({
                   type="submit"
                   className="text-blue-500 font-semibold text-sm hover:text-blue-700"
                 >
-                  Post
+                  Send
                 </button>
               )}
             </form>

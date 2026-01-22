@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 
 export default function Footer() {
     return (
-        <footer className="flex flex-col justify-between items-center gap-4 py-8 text-xs text-gray-800">
+        <footer className="flex flex-col justify-between items-center gap-4 py-8 text-xs text-gray-800 dark:text-white">
             <div className="flex justify-center gap-4 shrink-0 flex-wrap px-4">
                 <NavLink to="/meta" className="hover:underline">
                     Meta

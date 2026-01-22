@@ -22,7 +22,7 @@ export default function ChatWindow() {
             {!isOpen ? (
                 <div
                     onClick={() => setIsOpen(true)}
-                    className="p-3 md:w-60 bg-white border border-gray-200 rounded-full shadow-lg cursor-pointer transition-colors hover:bg-gray-100 select-none"
+                    className="p-3 md:w-60 bg-white dark:bg-black dark:border-gray-800 border border-gray-200 rounded-full shadow-lg cursor-pointer transition-colors hover:bg-gray-100 dark:hover:bg-gray-500 dark:hover:text-white select-none"
                 >
                     <div className="flex gap-4">
                         <Send />
@@ -30,8 +30,8 @@ export default function ChatWindow() {
                     </div>
                 </div>
             ) : (
-                <div className="relative bg-white border border-gray-200 rounded-xl shadow-lg">
-                    <div className="flex flex-col w-60 h-60 md:w-80 md:h-60 lg:h-100">
+                <div className="relative bg-white dark:bg-black dark:border-gray-800 border border-gray-200 rounded-xl shadow-lg">
+                    <div className="flex flex-col w-80 h-80 md:w-80 md:h-60 lg:h-100">
                         <div className="w-full flex justify-between items-center p-4 border-b-2 border-b-gray-100">
                             <h3 className="font-bold">Message</h3>
                             <div className="flex gap-4">
@@ -46,9 +46,9 @@ export default function ChatWindow() {
                                 />
                             </div>
                         </div>
-                        <div className="p-4">hello</div>
+                        <div className="p-4 overflow-y-auto">hello</div>
                     </div>
-                    <div className="absolute right-4 bottom-4 w-14 h-14 flex justify-center items-center bg-white border border-gray-200 rounded-full shadow-lg cursor-pointer hover:bg-secondary transition-all">
+                    <div className="absolute right-4 bottom-4 w-14 h-14 flex justify-center items-center bg-white dark:bg-black dark:border-gray-800 border border-gray-200 rounded-full shadow-lg cursor-pointer hover:bg-secondary transition-all">
                         <SquarePen size={24} />
                     </div>
                 </div>

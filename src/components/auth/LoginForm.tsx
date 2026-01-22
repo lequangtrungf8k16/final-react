@@ -108,7 +108,7 @@ export default function LoginForm({
             <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 cursor-pointer transition-all select-none"
+                className="w-full p-3 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 disabled:bg-gray-400 cursor-pointer transition-all select-none"
             >
                 {isLoading ? "Loading..." : "Login"}
             </button>
@@ -119,7 +119,7 @@ export default function LoginForm({
                     <button
                         type="button"
                         onClick={onRegister}
-                        className="text-blue-500 font-medium hover:underline cursor-pointer select-none"
+                        className="text-blue-500 dark:text-white font-medium hover:underline cursor-pointer select-none"
                     >
                         Register now
                     </button>

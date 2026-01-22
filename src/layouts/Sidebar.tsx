@@ -1,5 +1,5 @@
 import SidebarDropDown from "./SidebarDropDown";
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -22,11 +22,15 @@ import {
     MessageSquareWarning,
     Sun,
     LogOut,
+    Moon,
 } from "lucide-react";
 
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import SearchContent from "@/components/SearchContent";
 import SidebarItem from "./SidebarItem";
+import { useTheme } from "@/hooks/useTheme";
+import { logout } from "@/store/slices/authSlice";
+import { useDispatch } from "react-redux";
 
 type SidebarItemType = {
     type: "link" | "action" | "modal";
@@ -74,6 +78,10 @@ export default function Sidebar({ onOpenCreate }: SidebarProps) {
     const [isMoreOpen, setIsMoreOpen] = useState(false);
     const [isMetaOpen, setIsMetaOpen] = useState(false);
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { theme, toggleTheme } = useTheme();
+
     const handlePanelClick = (item: SidebarItemType) => {
         if (item.type === "modal") {
             onOpenCreate();
@@ -89,13 +97,18 @@ export default function Sidebar({ onOpenCreate }: SidebarProps) {
         setActivePanel(null);
     };
 
+    const handleLogout = () => {
+        dispatch(logout());
+        navigate("/login");
+    };
+
     const sidebarWidthClass = activePanel ? "lg:w-20" : "lg:w-64";
 
     return (
         <div className="flex z-50 relative select-none">
             <nav
                 className={cn(
-                    "fixed bottom-0 left-0 right-0 z-50 bg-white border-t",
+                    "fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-black dark:border-gray-800 border-t",
                     "md:sticky md:top-0 md:h-screen md:border-r md:border-t-0 md:flex md:flex-col md:py-4 transition-all duration-300",
                     "w-full md:w-20",
                     sidebarWidthClass,
@@ -152,7 +165,8 @@ export default function Sidebar({ onOpenCreate }: SidebarProps) {
                         hideLabel={!!activePanel}
                     >
                         <DropdownMenuItem className="cursor-pointer">
-                            <AtSign className="mr-2 h-4 w-4" /> Threads
+                            <AtSign className=" mr-2 h-4 w-4" />
+                            Threads
                         </DropdownMenuItem>
                     </SidebarDropDown>
 
@@ -174,15 +188,26 @@ export default function Sidebar({ onOpenCreate }: SidebarProps) {
                         <DropdownMenuItem className="cursor-pointer">
                             <Bookmark className="mr-2 h-4 w-4" /> Saved
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="cursor-pointer">
-                            <Sun className="mr-2 h-4 w-4" /> Switch appearance
+                        <DropdownMenuItem
+                            onClick={toggleTheme}
+                            className="cursor-pointer"
+                        >
+                            {theme === "dark" ? (
+                                <Moon className="mr-2 h-4 w-4" />
+                            ) : (
+                                <Sun className="mr-2 h-4 w-4" />
+                            )}
+                            Switch appearance
                         </DropdownMenuItem>
                         <DropdownMenuItem className="cursor-pointer">
                             <MessageSquareWarning className="mr-2 h-4 w-4" />{" "}
                             Report a problem
                         </DropdownMenuItem>
                         <div className="h-px bg-gray-200 my-1" />
-                        <DropdownMenuItem className="cursor-pointer text-red-500 font-medium">
+                        <DropdownMenuItem
+                            onClick={handleLogout}
+                            className="cursor-pointer text-red-500 font-medium"
+                        >
                             <LogOut className="mr-2 h-4 w-4" /> Log out
                         </DropdownMenuItem>
                     </SidebarDropDown>
@@ -192,7 +217,7 @@ export default function Sidebar({ onOpenCreate }: SidebarProps) {
             {/* Nút Tìm kiếm và Thông báo */}
             <div
                 className={cn(
-                    "fixed top-0 left-0 h-full bg-white z-40 shadow-2xl border-r border-gray-200 transition-transform duration-300 ease-in-out w-99",
+                    "fixed top-0 left-0 h-full bg-white dark:bg-black dark:border-gray-800 z-40 shadow-2xl border-r border-gray-200 transition-transform duration-300 ease-in-out w-99",
                     activePanel === "search"
                         ? "translate-x-17 md:translate-x-18"
                         : "-translate-x-full",
@@ -204,7 +229,7 @@ export default function Sidebar({ onOpenCreate }: SidebarProps) {
             {/* Notification Panel */}
             <div
                 className={cn(
-                    "fixed top-0 left-0 h-full bg-white z-40 shadow-2xl border-r border-gray-200 transition-transform duration-300 ease-in-out w-99",
+                    "fixed top-0 left-0 h-full bg-white dark:bg-black dark:border-gray-800 z-40 shadow-2xl border-r border-gray-200 transition-transform duration-300 ease-in-out w-99",
                     activePanel === "notifications"
                         ? "translate-x-17 md:translate-x-18"
                         : "-translate-x-full",

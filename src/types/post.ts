@@ -1,56 +1,61 @@
 import type { User } from "./user";
 
 export interface Pagination {
-    currentPage: number;
-    totalPages: number;
-    totalPosts?: number;
-    totalItems?: number;
-    hasMore: boolean;
+  currentPage: number;
+  totalPages: number;
+  totalPosts?: number;
+  totalItems?: number;
+  hasMore: boolean;
 }
 export interface Comment {
-    _id: string;
-    postId: string;
-    userId: User;
+  _id: string;
+  postId: string;
 
-    content: string;
-    parentCommentId: string | null;
-    likes: number;
-    repliesCount?: number;
-    createdAt: string;
-    updatedAt?: string;
+  userId: {
+    _id: string;
+    username: string;
+    profilePicture: string;
+  };
+
+  content: string;
+
+  parentCommentId: string | null;
+  likes: number;
+  repliesCount?: number;
+  createdAt: string;
 }
 
 export interface Post {
-    _id: string;
-    caption?: string;
+  _id: string;
+  caption?: string;
 
-    image: string;
-    video?: string | null;
-    mediaType: "image" | "video";
+  image: string;
+  video?: string | null;
+  mediaType: "image" | "video";
 
-    userId: User;
+  userId: User;
 
-    likes: number;
-    comments: number;
+  likes: number;
+  comments: number;
 
-    isLiked?: boolean;
-    isSaved?: boolean;
+  isLiked?: boolean;
+  isSaved?: boolean;
 
-    createdAt: string;
-    updatedAt?: string;
+  createdAt: string;
+  updatedAt?: string;
 }
 
 export interface PostsResponse {
-    success: boolean;
-    message: string;
-    data: {
-        posts: Post[];
-        pagination: Pagination;
-    };
+  success: boolean;
+  message: string;
+  data: {
+    posts: Post[];
+    pagination: Pagination;
+  };
 }
 
 export interface PostDetailResponse {
-    success: boolean;
-    message: string;
-    data: Post;
+  success: boolean;
+  message: string;
+  data: Post;
 }

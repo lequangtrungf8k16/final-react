@@ -61,6 +61,36 @@ export const unlikePost = createAsyncThunk(
     },
 );
 
+// Save một post
+export const savePost = createAsyncThunk(
+    "post/savePost",
+    async (postId: string, { rejectWithValue }) => {
+        try {
+            await postService.savePost(postId);
+            return { postId };
+        } catch (error: any) {
+            return rejectWithValue(
+                error.response?.data?.message || "Failed to save post",
+            );
+        }
+    },
+);
+
+// UnSave môt post
+export const unSavePost = createAsyncThunk(
+    "post/unSavePost",
+    async (postId: string, { rejectWithValue }) => {
+        try {
+            await postService.unSavePost(postId);
+            return { postId };
+        } catch (error: any) {
+            return rejectWithValue(
+                error.response?.data?.message || "Failed to unsave post",
+            );
+        }
+    },
+);
+
 // Slice
 const postSlice = createSlice({
     name: "post",
@@ -108,6 +138,24 @@ const postSlice = createSlice({
                 if (post) {
                     post.isLiked = false;
                     post.likes = Math.max(0, post.likes - 1);
+                }
+            })
+
+            // Xử lý save post
+            .addCase(savePost.fulfilled, (state, action) => {
+                const { postId } = action.payload;
+                const post = state.posts.find((p) => p._id === postId);
+                if (post) {
+                    post.isSaved = true;
+                }
+            })
+
+            // Xử lý unsave post
+            .addCase(unSavePost.fulfilled, (state, action) => {
+                const { postId } = action.payload;
+                const post = state.posts.find((p) => p._id === postId);
+                if (post) {
+                    post.isSaved = false;
                 }
             });
     },

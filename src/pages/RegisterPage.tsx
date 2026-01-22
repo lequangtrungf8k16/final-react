@@ -14,12 +14,29 @@ const registerSchema = z
     .object({
         username: z
             .string()
-            .min(3, "Username must be at least 3 characters long"),
-        fullname: z.string().min(3, "Fullname is too short"),
+            .min(3, "Username must be at least 3 characters long")
+            .regex(
+                /^[a-zA-Z0-9_]+$/,
+                "Username can only contain letters, numbers and underscores",
+            )
+            .max(20, "Username must not exceed 20 characters"),
+        fullname: z
+            .string()
+            .min(3, "Fullname is too short")
+            .max(50, "Fullname must not exceed 50 characters"),
         email: z.string().email("Invalid email"),
         password: z
             .string()
-            .min(6, "Password must be at least 6 characters long"),
+            .min(6, "Password must be at least 6 characters long")
+            .regex(
+                /[A-Z]/,
+                "The password must contain at least one uppercase character",
+            )
+            .regex(/[0-9]/, "Password must contain at least one number")
+            .regex(
+                /[^a-zA-Z0-9]/,
+                "Password must contain at least one special character",
+            ),
         confirmPassword: z.string(),
     })
     .refine((data) => data.password === data.confirmPassword, {

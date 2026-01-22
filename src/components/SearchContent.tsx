@@ -5,7 +5,7 @@ export default function SearchContent() {
     const [searchText, setSearchText] = useState("");
     const handleClear = () => setSearchText("");
     return (
-        <div className="flex flex-col h-full w-full bg-white">
+        <div className="flex flex-col h-full w-full bg-white dark:bg-black dark:border-gray-800">
             <div className="px-6 pt-6 md:pt-0">
                 <h2 className="text-2xl font-bold hidden md:block">Search</h2>
                 <SearchInput

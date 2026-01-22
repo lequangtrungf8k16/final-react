@@ -22,7 +22,7 @@ export default function SidebarItem({
     hideLabel,
 }: SidebarItemProps) {
     const commonClass = cn(
-        "flex items-center transition-all duration-300 rounded-lg cursor-pointer group hover:bg-gray-100",
+        "flex items-center transition-all duration-300 rounded-lg cursor-pointer group hover:bg-gray-100 dark:hover:bg-gray-500",
         hideLabel
             ? "w-12 h-12 justify-center p-0 mx-auto"
             : "w-full justify-start p-3 mx-0",
@@ -31,7 +31,7 @@ export default function SidebarItem({
     );
 
     const labelClass = cn(
-        "whitespace-nowrap text-base font-normal transition-all duration-200",
+        "whitespace-nowrap pl-3 text-base font-normal transition-all duration-200",
         !hideLabel && label ? "hidden lg:block" : "hidden",
     );
 
@@ -49,7 +49,8 @@ export default function SidebarItem({
                 className={({ isActive }) =>
                     cn(
                         commonClass,
-                        (isActive || isActivePanel) && "font-bold bg-gray-100",
+                        (isActive || isActivePanel) &&
+                            "font-bold bg-gray-100 dark:bg-black dark:border-gray-800",
                     )
                 }
                 onClick={onClick}
@@ -63,7 +64,8 @@ export default function SidebarItem({
         <div
             className={cn(
                 commonClass,
-                isActivePanel && "font-bold border border-gray-200 bg-gray-100",
+                isActivePanel &&
+                    "font-bold border border-gray-200 bg-gray-100 dark:bg-black dark:border-gray-800",
             )}
             onClick={onClick}
             role="button"

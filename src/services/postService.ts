@@ -33,7 +33,7 @@ export const postService = {
 
     // Lấy chi tiết một post (bao gồm comments)
     getPostDetail: (postId: string) => {
-        return api.get<PostDetailResponse>(`/api/post/${postId}`);
+        return api.get<PostDetailResponse>(`/api/posts/${postId}`);
     },
 
     // Tạo post mới với ảnh hoặc video
@@ -43,7 +43,7 @@ export const postService = {
         if (caption) {
             formData.append("caption", caption);
         }
-        return api.post("/api/post", formData, {
+        return api.post("/api/posts", formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
@@ -52,31 +52,31 @@ export const postService = {
 
     // Cập nhật caption của post
     updatePost: (postId: string, caption: string) => {
-        return api.patch(`/api/post/${postId}`, { caption });
+        return api.patch(`/api/posts/${postId}`, { caption });
     },
 
     // Xóa post
     deletePost: (postId: string) => {
-        return api.delete(`/api/post/${postId}`);
+        return api.delete(`/api/posts/${postId}`);
     },
 
     // Like một post
     likePost: (postId: string) => {
-        return api.post(`/api/post/${postId}/like`);
+        return api.post(`/api/posts/${postId}/like`);
     },
 
     // Unlike một post
     unlikePost: (postId: string) => {
-        return api.post(`/api/post/${postId}/like`);
+        return api.post(`/api/posts/${postId}/like`);
     },
 
     // Lưu post vào collection
     savePost: (postId: string) => {
-        return api.post(`/api/post/${postId}/save`);
+        return api.post(`/api/posts/${postId}/save`);
     },
 
     // Bỏ lưu post
     unSavePost: (postId: string) => {
-        return api.post(`/api/post/${postId}/save`);
+        return api.delete(`/api/posts/${postId}/save`);
     },
 };

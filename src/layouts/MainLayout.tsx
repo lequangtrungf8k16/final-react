@@ -15,7 +15,7 @@ export default function MainLayout() {
                 <Sidebar onOpenCreate={() => setCreateOpen(true)} />
             </div>
 
-            <main className="flex-1 z-30 w-full bg-white relative">
+            <main className="flex-1 z-30 w-full bg-background text-foreground relative">
                 <div className="md:flex flex-col w-full min-h-screen hidden">
                     {/* Hiển thị các trang */}
                     <div className="flex-1 px-2 py-4">

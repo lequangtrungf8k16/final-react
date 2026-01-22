@@ -31,7 +31,7 @@ export default function SidebarDropDown({
                 <button
                     type="button"
                     className={cn(
-                        "flex items-center transition-all duration-300 rounded-lg cursor-pointer group hover:bg-gray-100 outline-none focus-visible:ring-0",
+                        "flex items-center transition-all duration-300 rounded-lg cursor-pointer group hover:bg-gray-100 dark:hover:bg-gray-500 outline-none focus-visible:ring-0",
                         hideLabel
                             ? "w-12 h-12 justify-center p-0 mx-auto"
                             : "w-full justify-start p-3 mx-0",

@@ -41,6 +41,9 @@ export interface Post {
   isLiked?: boolean;
   isSaved?: boolean;
 
+  likedBy?: string[] | { _id: string }[];
+  savedBy?: string[] | { _id: string }[];
+
   createdAt: string;
   updatedAt?: string;
 }

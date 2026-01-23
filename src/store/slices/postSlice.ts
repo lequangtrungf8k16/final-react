@@ -5,19 +5,25 @@ import type { RootState } from "../store";
 
 interface PostState {
   posts: Post[];
+  explorePosts: Post[];
   isLoading: boolean;
   error: string | null;
   pagination: Pagination | null;
+  explorePagination: Pagination | null;
 }
 
 const initialState: PostState = {
   posts: [],
+  explorePosts: [],
   isLoading: false,
   error: null,
   pagination: null,
+  explorePagination: null,
 };
 
-// Lấy danh sách tất cả posts (news feed), sorted by newest
+// THUNKS
+
+// Lấy News Feed
 export const getFeed = createAsyncThunk(
   "post/getFeed",
   async (
@@ -33,29 +39,34 @@ export const getFeed = createAsyncThunk(
       const data = (response as any).data;
 
       const fixedPosts = data.posts.map((post: any) => {
-        const isReallyLiked = post.likedBy?.some((id: string | any) => {
-          const userIdStr = typeof id === "string" ? id : id._id;
-          return userIdStr === currentUserId;
-        });
+        let finalIsLiked = post.isLiked;
+        if (Array.isArray(post.likedBy) && currentUserId) {
+          const found = post.likedBy.some((item: any) => {
+            const id = typeof item === "string" ? item : item._id;
+            return id === currentUserId;
+          });
+          if (found) finalIsLiked = true;
+        }
 
-        const isReallySaved = post.savedBy?.some((id: string | any) => {
-          const userIdStr = typeof id === "string" ? id : id._id;
-          return userIdStr === currentUserId;
-        });
+        let finalIsSaved = post.isSaved;
+        if (Array.isArray(post.savedBy) && currentUserId) {
+          const found = post.savedBy.some((item: any) => {
+            const id = typeof item === "string" ? item : item._id;
+            return id === currentUserId;
+          });
+          if (found) finalIsSaved = true;
+        }
 
         return {
           ...post,
-          isLiked: isReallyLiked ?? post.isLiked ?? false,
-          isSaved: isReallySaved ?? post.isSaved ?? false,
+          isLiked: finalIsLiked ?? false,
+          isSaved: finalIsSaved ?? false,
         };
       });
 
       return {
         ...data,
-        data: {
-          ...data,
-          posts: fixedPosts,
-        },
+        data: { ...data, posts: fixedPosts },
       };
     } catch (error: any) {
       return rejectWithValue(
@@ -65,7 +76,47 @@ export const getFeed = createAsyncThunk(
   },
 );
 
-// Thunk Create Post
+// Lấy Explore
+export const fetchExplorePosts = createAsyncThunk(
+  "post/getExplore",
+  async (
+    { page, limit }: { page?: number; limit?: number },
+    { rejectWithValue, getState },
+  ) => {
+    try {
+      const state = getState() as RootState;
+      const currentUserId = state.auth.user?._id;
+      const response = await postService.getExplorePosts(page, limit);
+      const data = (response as any).data;
+
+      const fixedPosts = data.posts.map((post: any) => ({
+        ...post,
+        isLiked:
+          post.isLiked ||
+          post.likedBy?.some(
+            (id: any) =>
+              (typeof id === "string" ? id : id._id) === currentUserId,
+          ) ||
+          false,
+        isSaved:
+          post.isSaved ||
+          post.savedBy?.some(
+            (id: any) =>
+              (typeof id === "string" ? id : id._id) === currentUserId,
+          ) ||
+          false,
+      }));
+
+      return { ...data, posts: fixedPosts };
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch explore",
+      );
+    }
+  },
+);
+
+// Create Post
 export const createPost = createAsyncThunk(
   "post/createPost",
   async (
@@ -83,7 +134,7 @@ export const createPost = createAsyncThunk(
   },
 );
 
-// Like một post
+// Like
 export const likePost = createAsyncThunk(
   "post/likePost",
   async (postId: string, { rejectWithValue }) => {
@@ -98,7 +149,7 @@ export const likePost = createAsyncThunk(
   },
 );
 
-// Unlike một post
+// Unlike
 export const unlikePost = createAsyncThunk(
   "post/unLikePost",
   async (postId: string, { rejectWithValue }) => {
@@ -113,7 +164,7 @@ export const unlikePost = createAsyncThunk(
   },
 );
 
-// Save một post
+// Save
 export const savePost = createAsyncThunk(
   "post/savePost",
   async (postId: string, { rejectWithValue }) => {
@@ -128,7 +179,7 @@ export const savePost = createAsyncThunk(
   },
 );
 
-// UnSave môt post
+// Unsave
 export const unSavePost = createAsyncThunk(
   "post/unSavePost",
   async (postId: string, { rejectWithValue }) => {
@@ -143,7 +194,8 @@ export const unSavePost = createAsyncThunk(
   },
 );
 
-// Slice
+// SLICE
+
 const postSlice = createSlice({
   name: "post",
   initialState,
@@ -152,29 +204,34 @@ const postSlice = createSlice({
       state.posts = [];
       state.pagination = null;
     },
+    clearExplore: (state) => {
+      state.explorePosts = [];
+      state.explorePagination = null;
+    },
   },
+
   extraReducers: (builder) => {
     builder
-      // Xử lý Lấy danh sách tất cả posts (news feed)
+      // GET FEED
       .addCase(getFeed.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(getFeed.fulfilled, (state, action) => {
         state.isLoading = false;
+        const payloadData = action.payload as any;
+        const postsData = payloadData.data?.posts || payloadData.posts;
+        const paginationData =
+          payloadData.data?.pagination || payloadData.pagination;
 
-        const data = action.payload?.data || action.payload;
-
-        if (data?.posts) {
+        if (postsData) {
           const { offset } = action.meta.arg;
-
           if (offset === 0) {
-            state.posts = data.posts;
+            state.posts = postsData;
           } else {
-            state.posts = [...state.posts, ...data.posts];
+            state.posts = [...state.posts, ...postsData];
           }
-
-          state.pagination = data.pagination;
+          state.pagination = paginationData;
         }
       })
       .addCase(getFeed.rejected, (state, action) => {
@@ -182,7 +239,20 @@ const postSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Create Post
+      // GET explore
+      .addCase(fetchExplorePosts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchExplorePosts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        if (action.meta.arg.page === 1)
+          state.explorePosts = action.payload.posts;
+        else
+          state.explorePosts = [...state.explorePosts, ...action.payload.posts];
+        state.explorePagination = action.payload.pagination;
+      })
+
+      // CREATE POST
       .addCase(createPost.pending, (state) => {
         state.isLoading = true;
       })
@@ -197,45 +267,43 @@ const postSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Xử lý like post
-      .addCase(likePost.fulfilled, (state, action) => {
-        const { postId } = action.payload;
-        const post = state.posts.find((p) => p._id === postId);
-        if (post) {
-          post.isLiked = true;
-          post.likes += 1;
-        }
+      // Like/Save
+      .addCase(likePost.pending, (state, action) => {
+        const postId = action.meta.arg;
+        [state.posts, state.explorePosts].forEach((list) => {
+          const p = list.find((x) => x._id === postId);
+          if (p && !p.isLiked) {
+            p.isLiked = true;
+            p.likes += 1;
+          }
+        });
       })
-
-      // Xử lý unlike post
       .addCase(unlikePost.fulfilled, (state, action) => {
         const { postId } = action.payload;
-        const post = state.posts.find((p) => p._id === postId);
-        if (post) {
-          post.isLiked = false;
-          post.likes = Math.max(0, post.likes - 1);
-        }
+        [state.posts, state.explorePosts].forEach((list) => {
+          const p = list.find((x) => x._id === postId);
+          if (p) {
+            p.isLiked = false;
+            p.likes = Math.max(0, p.likes - 1);
+          }
+        });
       })
-
-      // Xử lý save post
-      .addCase(savePost.fulfilled, (state, action) => {
-        const { postId } = action.payload;
-        const post = state.posts.find((p) => p._id === postId);
-        if (post) {
-          post.isSaved = true;
-        }
+      .addCase(savePost.pending, (state, action) => {
+        const postId = action.meta.arg;
+        [state.posts, state.explorePosts].forEach((list) => {
+          const p = list.find((x) => x._id === postId);
+          if (p) p.isSaved = true;
+        });
       })
-
-      // Xử lý unsave post
-      .addCase(unSavePost.fulfilled, (state, action) => {
-        const { postId } = action.payload;
-        const post = state.posts.find((p) => p._id === postId);
-        if (post) {
-          post.isSaved = false;
-        }
+      .addCase(unSavePost.pending, (state, action) => {
+        const postId = action.meta.arg;
+        [state.posts, state.explorePosts].forEach((list) => {
+          const p = list.find((x) => x._id === postId);
+          if (p) p.isSaved = false;
+        });
       });
   },
 });
 
-export const { clearPosts } = postSlice.actions;
+export const { clearPosts, clearExplore } = postSlice.actions;
 export default postSlice.reducer;

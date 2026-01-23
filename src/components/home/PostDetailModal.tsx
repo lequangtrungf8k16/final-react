@@ -96,8 +96,10 @@ export default function PostDetailModal({
 
   // Xử lý xóa comment
   const handleDeleteComment = async (commentId: string) => {
-    confirm("Bạn có chắc muốn xóa?");
-    await dispatch(deleteComment({ postId: post._id, commentId }));
+    const isConfirmed = confirm("Bạn có chắc muốn xóa?");
+    if (isConfirmed) {
+      await dispatch(deleteComment({ postId: post._id, commentId }));
+    }
   };
 
   const getFullMediaUrl = (path: string) => {
@@ -115,9 +117,9 @@ export default function PostDetailModal({
         <DialogTitle className="hidden">Post Detail</DialogTitle>
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 z-50 md:hidden bg-black/50 rounded-full p-1 text-white"
+          className="absolute top-3 right-3 z-50 p-1.5 bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20 rounded-full text-black dark:text-white transition-all cursor-pointer custom-close"
         >
-          <X size={20} />
+          <X size={20} strokeWidth={2.5} />
         </button>
 
         {/* LEFT: MEDIA */}
@@ -154,7 +156,7 @@ export default function PostDetailModal({
             </div>
             <MoreHorizontal
               size={20}
-              className="cursor-pointer dark:text-white"
+              className="cursor-pointer dark:text-white mr-8"
             />
           </div>
 

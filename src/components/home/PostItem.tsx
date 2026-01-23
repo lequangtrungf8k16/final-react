@@ -96,7 +96,7 @@ export default function PostItem({
   };
 
   return (
-    <div className="flex flex-col w-full border border-gray-200 rounded-lg dark:border-gray-800 p-3 bg-white dark:bg-black">
+    <div className="flex flex-col w-full border border-gray-200 rounded-lg shadow-md dark:shadow-none dark:border-gray-800 p-3 bg-white dark:bg-black hover:scale-101 hover:shadow-lg transition-all">
       {/* Header */}
       <div className="flex items-center justify-between py-3 px-1">
         <div className="flex items-center gap-3">

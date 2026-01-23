@@ -64,7 +64,7 @@ export const deleteComment = createAsyncThunk(
   ) => {
     try {
       await commentService.deleteComment(postId, commentId);
-      return commentId; // Trả về ID để reducer biết mà xóa
+      return commentId;
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to delete comment",

@@ -6,7 +6,7 @@ export const commentService = {
     return api.get<{ data: Comment[] }>(`/api/posts/${postId}/comments`);
   },
 
-  //   Gửi comment
+  // Gửi comment
   createComment: (postId: string, content: string) => {
     return api.post<Comment>(`/api/posts/${postId}/comments`, { content });
   },

@@ -6,10 +6,9 @@ import {
   Send,
   Bookmark,
   MoreHorizontal,
-  Smile,
 } from "lucide-react";
 
-// --- HOOKS & REDUX ---
+// HOOKS & REDUX
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/store/store";
@@ -66,22 +65,22 @@ export default function PostItem({
   const fullMediaUrl = getFullMediaUrl(imageUrl);
   const fullAvatarUrl = getFullMediaUrl(avatarUrl);
 
-  // Xử lý Like/Save
+  // Xử lý Like/unLike
   const handleLikeToggle = () => {
     if (isLiked) dispatch(unlikePost(postId));
     else dispatch(likePost(postId));
   };
 
+  // Xử lý Save/unSave
   const handleSaveToggle = () => {
     if (isSaved) dispatch(unSavePost(postId));
     else dispatch(savePost(postId));
   };
 
-  // --- XỬ LÝ GỬI COMMENT ---
+  // XỬ LÝ gửi comment
   const handlePostComment = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Kiểm tra kỹ: Phải có chữ và không đang gửi
     if (!commentText.trim() || isPosting) return;
 
     setIsPosting(true);
@@ -89,9 +88,8 @@ export default function PostItem({
       await dispatch(addComment({ postId, content: commentText })).unwrap();
 
       setCommentText("");
-      console.log("✅ Comment sent!");
     } catch (error) {
-      console.error("❌ Failed:", error);
+      console.error(error);
     } finally {
       setIsPosting(false);
     }
@@ -99,7 +97,7 @@ export default function PostItem({
 
   return (
     <div className="flex flex-col w-full border border-gray-200 rounded-lg dark:border-gray-800 p-3 bg-white dark:bg-black">
-      {/* 1. Header */}
+      {/* Header */}
       <div className="flex items-center justify-between py-3 px-1">
         <div className="flex items-center gap-3">
           <Avatar className="w-8 h-8 cursor-pointer border border-gray-200 dark:border-gray-700">
@@ -122,7 +120,7 @@ export default function PostItem({
         </Button>
       </div>
 
-      {/* 2. Media */}
+      {/* Media */}
       <div className="w-full bg-black rounded-sm overflow-hidden aspect-square border border-gray-100 dark:border-gray-800 flex items-center justify-center relative">
         {mediaType === "video" ? (
           <video
@@ -139,7 +137,7 @@ export default function PostItem({
         )}
       </div>
 
-      {/* 3. Actions */}
+      {/* Actions */}
       <div className="flex items-center justify-between mt-3 mb-2 px-1">
         <div className="flex items-center gap-4">
           <Button
@@ -197,7 +195,7 @@ export default function PostItem({
         </Button>
       </div>
 
-      {/* 4. Info */}
+      {/* Info */}
       <div className="text-sm dark:text-white px-1">
         <div className="font-semibold mb-1">
           {likesCount.toLocaleString()} likes
@@ -217,7 +215,7 @@ export default function PostItem({
         </div>
       </div>
 
-      {/* 5. INPUT COMMENT */}
+      {/* INPUT COMMENT */}
       <form
         onSubmit={handlePostComment}
         className="flex items-center gap-2 border-b border-transparent focus-within:border-gray-300 dark:focus-within:border-gray-700 transition-colors mt-1 pb-3 px-1"

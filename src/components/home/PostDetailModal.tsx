@@ -9,7 +9,7 @@ import {
   MoreHorizontal,
   X,
   Trash2,
-} from "lucide-react"; // [MỚI] Thêm Trash2
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/store/store";
@@ -18,7 +18,7 @@ import {
   addComment,
   clearComments,
   deleteComment,
-} from "@/store/slices/commentSlice"; // [MỚI] Import deleteComment
+} from "@/store/slices/commentSlice";
 import {
   likePost,
   unlikePost,
@@ -94,7 +94,7 @@ export default function PostDetailModal({
     setCommentText("");
   };
 
-  // [MỚI] Hàm xử lý xóa comment
+  // Xử lý xóa comment
   const handleDeleteComment = async (commentId: string) => {
     confirm("Bạn có chắc muốn xóa?");
     await dispatch(deleteComment({ postId: post._id, commentId }));
@@ -194,14 +194,6 @@ export default function PostDetailModal({
 
               const isMyComment =
                 myId && creatorId && myId.toString() === creatorId.toString();
-
-              if (index === 0) {
-                console.log("🔍 DEBUG CHECK QUYỀN:", {
-                  MyID: myId,
-                  CreatorID: creatorId,
-                  Match: isMyComment,
-                });
-              }
 
               return (
                 <div

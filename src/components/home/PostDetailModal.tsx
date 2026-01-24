@@ -1,4 +1,9 @@
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import {
@@ -29,7 +34,7 @@ import type { Post } from "@/types/post";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
 
-const API_URL = "https://instagram.f8team.dev";
+const API_URL = import.meta.env.VITE_BASE_URL;
 
 interface PostDetailModalProps {
   isOpen: boolean;
@@ -113,8 +118,13 @@ export default function PostDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-5xl w-[95vw] md:w-full p-0 gap-0 overflow-hidden h-[80vh] md:h-[85vh] flex flex-col md:flex-row bg-white dark:bg-black border dark:border-gray-800 rounded-lg z-100 outline-none [&>button:not(.custom-close)]:hidden">
-        <DialogTitle className="hidden">Post Detail</DialogTitle>
+      <DialogContent className="sm:max-w-5xl w-[95vw] md:w-full p-0 gap-0 overflow-hidden h-[80vh] md:h-[85vh] flex flex-col md:flex-row bg-white dark:bg-black border dark:border-gray-800 rounded-lg z-50 outline-none [&>button:not(.custom-close)]:hidden">
+        <div className="hidden">
+          <DialogTitle>Post Detail</DialogTitle>
+          <DialogDescription>
+            Detailed view of the post including comments and likes.
+          </DialogDescription>
+        </div>
         <button
           onClick={onClose}
           className="absolute top-3 right-3 z-50 p-1.5 bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20 rounded-full text-black dark:text-white transition-all cursor-pointer custom-close"

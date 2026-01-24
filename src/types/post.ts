@@ -7,18 +7,16 @@ export interface Pagination {
   totalItems?: number;
   hasMore: boolean;
 }
+
 export interface Comment {
   _id: string;
   postId: string;
-
   userId: {
     _id: string;
     username: string;
     profilePicture: string;
   };
-
   content: string;
-
   parentCommentId: string | null;
   likes: number;
   repliesCount?: number;
@@ -28,7 +26,6 @@ export interface Comment {
 export interface Post {
   _id: string;
   caption?: string;
-
   image: string;
   video?: string | null;
   mediaType: "image" | "video";
@@ -36,14 +33,12 @@ export interface Post {
   userId: User;
 
   likes: number;
+  likesCount?: number;
   comments: number;
-
   isLiked?: boolean;
   isSaved?: boolean;
-
   likedBy?: string[] | { _id: string }[];
   savedBy?: string[] | { _id: string }[];
-
   createdAt: string;
   updatedAt?: string;
 }

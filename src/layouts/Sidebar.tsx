@@ -12,7 +12,6 @@ import {
   Send,
   Heart,
   Plus,
-  Circle,
   Menu,
   Network,
   Settings,
@@ -83,7 +82,9 @@ const SIDEBAR_ITEMS: SidebarItemType[] = [
   },
   { type: "link", href: "/explore", label: "Explore", icon: Compass },
   { type: "link", href: "/reels", label: "Reels", icon: SquarePlay },
-  { type: "link", href: "/message", label: "Message", icon: Send },
+
+  { type: "link", href: "/messages", label: "Message", icon: Send },
+
   {
     type: "action",
     action: "notifications",
@@ -247,7 +248,7 @@ export default function Sidebar({ onOpenCreate }: SidebarProps) {
             : "-translate-x-full",
         )}
       >
-        <SearchContent />
+        <SearchContent onClose={() => setActivePanel(null)} />
       </div>
 
       {/* Notification Panel */}

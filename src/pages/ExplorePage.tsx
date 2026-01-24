@@ -6,7 +6,7 @@ import { Heart, MessageCircle, Play } from "lucide-react";
 import PostDetailModal from "@/components/home/PostDetailModal";
 import type { Post } from "@/types/post";
 
-const API_URL = "https://instagram.f8team.dev";
+const API_URL = import.meta.env.VITE_BASE_URL;
 
 export default function ExplorePage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -17,7 +17,7 @@ export default function ExplorePage() {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 1. Load dữ liệu lần đầu
+  // Load dữ liệu lần đầu
   useEffect(() => {
     dispatch(fetchExplorePosts({ page: 1, limit: 18 }));
     return () => {
@@ -85,7 +85,7 @@ export default function ExplorePage() {
         </div>
       )}
 
-      {/* Nút Load more (Nếu có pagination) */}
+      {/* Nút Load more */}
       {explorePagination?.hasMore && !isLoading && (
         <div className="flex justify-center mt-10">
           <button

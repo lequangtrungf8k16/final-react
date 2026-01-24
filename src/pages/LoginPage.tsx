@@ -5,60 +5,68 @@ import { loginUser } from "@/store/slices/authSlice";
 import type { LoginPayload } from "@/types";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function LoginPage() {
-    const navigate = useNavigate();
-    const dispatch = useAppDispatch();
-    const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const location = useLocation();
 
-    const { isLoading, error, isAuthenticated } = useAppSelector(
-        (state) => state.auth,
-    );
+  const { isLoading, error, isAuthenticated } = useAppSelector(
+    (state) => state.auth,
+  );
 
-    const [initialData, setInitialData] = useState<LoginPayload | undefined>(
-        undefined,
-    );
+  const [initialData, setInitialData] = useState<LoginPayload | undefined>(
+    undefined,
+  );
 
-    useEffect(() => {
-        console.log("Check Auth:", { isAuthenticated, isLoading, error });
+  // Nếu đã đăng nhập từ trước, tự động về Home
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
-        if (isAuthenticated && !error && !isLoading) {
-            navigate("/", { replace: true });
-        }
-    }, [isAuthenticated, navigate, error, isLoading]);
+  // Điền dữ liệu nếu chuyển từ trang Register sang
+  useEffect(() => {
+    if (location.state?.email && location.state?.password) {
+      setInitialData({
+        email: location.state.email,
+        password: location.state.password,
+      });
+    }
+  }, [location.state]);
 
-    useEffect(() => {
-        if (location.state?.email && location.state?.password) {
-            setInitialData({
-                email: location.state.email,
-                password: location.state.password,
-            });
-        }
-    }, [location.state]);
+  const handleLogin = async (data: LoginPayload) => {
+    try {
+      // Gọi action login
+      const resultAction = await dispatch(loginUser(data));
 
-    const handleLogin = async (data: LoginPayload) => {
-        const resultAction = await dispatch(loginUser(data));
+      // Kiểm tra kết quả ngay tại đây để chuyển trang
+      if (loginUser.fulfilled.match(resultAction)) {
+        toast.success("Login successfully!");
+        navigate("/", { replace: true });
+      } else {
+        console.log("Login failed:", resultAction.payload);
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err);
+    }
+  };
 
-        if (loginUser.fulfilled.match(resultAction)) {
-            console.log("Login success");
-        } else {
-            console.log("Login failed:", resultAction.payload);
-        }
-    };
+  const handleNavigateToRegister = () => {
+    navigate("/register");
+  };
 
-    const handleNavigateToRegister = () => {
-        navigate("/register");
-    };
-
-    return (
-        <AuthWrapper title="Login" subTitle="">
-            <LoginForm
-                onSubmit={handleLogin}
-                isLoading={isLoading}
-                defaultValues={initialData}
-                rootError={error}
-                onRegister={handleNavigateToRegister}
-            />
-        </AuthWrapper>
-    );
+  return (
+    <AuthWrapper title="Login" subTitle="">
+      <LoginForm
+        onSubmit={handleLogin}
+        isLoading={isLoading}
+        defaultValues={initialData}
+        rootError={error}
+        onRegister={handleNavigateToRegister}
+      />
+    </AuthWrapper>
+  );
 }

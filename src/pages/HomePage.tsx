@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { formatDistanceToNow } from "date-fns";
 import type { Post } from "@/types";
 import PostDetailModal from "@/components/home/PostDetailModal";
-import SuggestedUsers from "@/components/home/SuggestedUsers";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
@@ -19,9 +18,9 @@ export default function HomePage() {
 
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
-
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
+  // Load lần đầu
   useEffect(() => {
     if (posts.length === 0) {
       dispatch(getFeed({ limit: 10, offset: 0 }));
@@ -33,18 +32,15 @@ export default function HomePage() {
     setModalOpen(true);
   };
 
-  // --- HÀM XỬ LÝ LOAD MORE ---
   const handleLoadMore = async () => {
+    if (isLoadingMore || !pagination?.hasMore) return;
     setIsLoadingMore(true);
-
     const currentCount = posts.length;
-
     await dispatch(getFeed({ limit: 10, offset: currentCount })).unwrap();
-
     setIsLoadingMore(false);
   };
 
-  const hasMorePosts = pagination && posts.length < pagination.totalPages;
+  const hasMorePosts = pagination?.hasMore;
 
   return (
     <div className="flex justify-center w-full">
@@ -56,17 +52,19 @@ export default function HomePage() {
           </>
         )}
 
-        {/* Danh sách bài viết */}
         {posts.map((post) => {
           if (!post || !post._id) return null;
+
+          const author = post.userId;
+
           return (
             <PostItem
               key={post._id}
               postId={post._id}
               isLiked={!!post.isLiked}
               isSaved={!!post.isSaved}
-              username={post.userId?.username || ""}
-              avatarUrl={post.userId?.profilePicture || ""}
+              username={author?.username || "Unknown"}
+              avatarUrl={author?.profilePicture || ""}
               imageUrl={
                 post.mediaType === "video" ? post.video || "" : post.image || ""
               }
@@ -85,14 +83,13 @@ export default function HomePage() {
           );
         })}
 
-        {/* --- NÚT XEM THÊM --- */}
         {hasMorePosts && (
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center mt-6 mb-8">
             <Button
-              variant="outline"
+              variant="secondary"
               onClick={handleLoadMore}
               disabled={isLoadingMore}
-              className="w-full md:w-auto min-w-38"
+              className="w-full md:w-auto px-8 cursor-pointer bg-blue-500 hover:bg-blue-600 text-white"
             >
               {isLoadingMore ? (
                 <>
@@ -100,23 +97,23 @@ export default function HomePage() {
                   Loading...
                 </>
               ) : (
-                "Xem thêm"
+                "Load More"
               )}
             </Button>
           </div>
         )}
 
-        {/* Hết bài */}
         {!hasMorePosts && posts.length > 0 && (
-          <div className="text-center text-gray-500 text-sm mt-4">
-            You have reached the end!
+          <div className="text-center text-gray-500 text-sm mt-4 mb-10">
+            You have reached the end! ✅
           </div>
         )}
       </div>
 
-      <div className="hidden lg:block w-80 pl-16 mt-8">
+      {/* Danh sách người dùng: Không làm */}
+      {/* <div className="hidden lg:block w-80 pl-16 mt-8">
         <SuggestedUsers />
-      </div>
+      </div> */}
 
       {selectedPost && (
         <PostDetailModal

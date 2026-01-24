@@ -8,7 +8,6 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 
-// HOOKS & REDUX
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/store/store";
@@ -21,7 +20,7 @@ import {
 import { addComment } from "@/store/slices/commentSlice";
 import { cn } from "@/lib/utils";
 
-const API_URL = "https://instagram.f8team.dev";
+const API_URL = import.meta.env.VITE_BASE_URL;
 
 interface PostItemProps {
   postId: string;
@@ -52,7 +51,6 @@ export default function PostItem({
 }: PostItemProps) {
   const dispatch = useDispatch<AppDispatch>();
 
-  // State cho Input
   const [commentText, setCommentText] = useState("");
   const [isPosting, setIsPosting] = useState(false);
 
@@ -65,28 +63,22 @@ export default function PostItem({
   const fullMediaUrl = getFullMediaUrl(imageUrl);
   const fullAvatarUrl = getFullMediaUrl(avatarUrl);
 
-  // Xử lý Like/unLike
   const handleLikeToggle = () => {
     if (isLiked) dispatch(unlikePost(postId));
     else dispatch(likePost(postId));
   };
 
-  // Xử lý Save/unSave
   const handleSaveToggle = () => {
     if (isSaved) dispatch(unSavePost(postId));
     else dispatch(savePost(postId));
   };
 
-  // XỬ LÝ gửi comment
   const handlePostComment = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!commentText.trim() || isPosting) return;
-
     setIsPosting(true);
     try {
       await dispatch(addComment({ postId, content: commentText })).unwrap();
-
       setCommentText("");
     } catch (error) {
       console.error(error);
@@ -156,7 +148,6 @@ export default function PostItem({
               )}
             />
           </Button>
-
           <Button
             variant="ghost"
             size="icon"
@@ -168,7 +159,6 @@ export default function PostItem({
               className="hover:scale-110 transition-transform -rotate-90"
             />
           </Button>
-
           <Button
             variant="ghost"
             size="icon"
@@ -198,7 +188,7 @@ export default function PostItem({
       {/* Info */}
       <div className="text-sm dark:text-white px-1">
         <div className="font-semibold mb-1">
-          {likesCount.toLocaleString()} likes
+          {(likesCount || 0).toLocaleString()} likes
         </div>
         <div className="mb-1">
           <span className="font-semibold mr-2 cursor-pointer hover:opacity-70">
@@ -206,7 +196,6 @@ export default function PostItem({
           </span>
           <span>{caption}</span>
         </div>
-
         <div
           className="text-gray-500 text-sm cursor-pointer mb-2 hover:text-gray-700 dark:hover:text-gray-400"
           onClick={onCommentClick}
@@ -215,7 +204,6 @@ export default function PostItem({
         </div>
       </div>
 
-      {/* INPUT COMMENT */}
       <form
         onSubmit={handlePostComment}
         className="flex items-center gap-2 border-b border-transparent focus-within:border-gray-300 dark:focus-within:border-gray-700 transition-colors mt-1 pb-3 px-1"
@@ -227,7 +215,6 @@ export default function PostItem({
           value={commentText}
           onChange={(e) => setCommentText(e.target.value)}
         />
-
         {commentText.trim().length > 0 && (
           <button
             type="submit"

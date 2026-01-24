@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "../lib/api";
 
 export const commentService = {
   // Lấy danh sách comment

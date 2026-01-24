@@ -1,5 +1,5 @@
 import type { PostDetailResponse, PostsResponse } from "@/types";
-import api from "./api";
+import api from "../lib/api";
 
 export const postService = {
   // Lấy danh sách tất cả posts (news feed), sorted by newest
@@ -9,7 +9,7 @@ export const postService = {
     });
   },
 
-  // Lấy danh sách posts trending (engagement score cao) Explore
+  // Lấy danh sách posts trending (Explore)
   getExplorePosts: (page: number = 1, limit = 20) => {
     return api.get<PostsResponse>("/api/posts/explore", {
       params: { page, limit },
@@ -28,7 +28,7 @@ export const postService = {
     });
   },
 
-  // Lấy chi tiết một post (bao gồm comments)
+  // Lấy chi tiết một post
   getPostDetail: (postId: string) => {
     return api.get<PostDetailResponse>(`/api/posts/${postId}`);
   },

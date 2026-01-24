@@ -82,7 +82,7 @@ export default function CreatePostModal({
     }
   };
 
-  // Xử lý nút Back (Quay lại)
+  // Xử lý nút Back
   const handleBack = () => {
     if (step === "caption") setStep("preview");
     else if (step === "preview") {
@@ -119,11 +119,11 @@ export default function CreatePostModal({
       <DialogContent
         className={
           step === "select"
-            ? "flex flex-col items-center w-80 h-80 md:max-w-100 md:h-125 lg:w-240 rounded-xl px-0 py-0 gap-0 overflow-hidden bg-white dark:bg-zinc-900 border-none outline-none"
-            : "flex flex-col items-center w-80 h-80 md:max-w-200 md:h-125 rounded-xl px-0 py-0 gap-0 overflow-hidden bg-white dark:bg-zinc-900 border-none outline-none"
+            ? "flex flex-col items-center w-80 h-80 md:max-w-120 md:h-125 lg:w-240 rounded-xl px-0 py-0 gap-0 overflow-hidden bg-white dark:bg-zinc-900 border-none outline-none"
+            : "flex flex-col items-center w-80 h-80 md:max-w-120 md:h-125 rounded-xl px-0 py-0 gap-0 overflow-hidden bg-white dark:bg-zinc-900 border-none outline-none"
         }
       >
-        {/* --- HEADER --- */}
+        {/* HEADER */}
         <DialogHeader className="w-full h-11 border-b border-gray-200 dark:border-gray-800 flex flex-row items-center justify-between px-4 shrink-0">
           {step === "select" ? (
             <DialogTitle className="w-full text-center font-semibold text-base">
@@ -152,7 +152,7 @@ export default function CreatePostModal({
                 <Button
                   variant="ghost"
                   onClick={handleNext}
-                  className="text-blue-500 font-semibold hover:text-blue-700 hover:bg-transparent -mr-2"
+                  className="text-blue-500 font-semibold hover:text-blue-700 hover:bg-transparent mr-4"
                 >
                   Next
                 </Button>
@@ -174,7 +174,7 @@ export default function CreatePostModal({
           )}
         </DialogHeader>
 
-        {/* --- BODY --- */}
+        {/* BODY */}
         <div className="w-full h-full flex flex-row">
           {/* Cột Trái: Ảnh/Video Preview */}
           <div
@@ -200,7 +200,7 @@ export default function CreatePostModal({
                   />
                 )}
 
-                {/* Các nút công cụ ảnh (Crop/Zoom) - Chỉ hiện ở bước Preview */}
+                {/* Các nút công cụ ảnh (Crop/Zoom) - Chỉ hiện ở Preview */}
                 {step === "preview" && (
                   <div className="absolute bottom-4 left-4 right-4 flex justify-between">
                     <div className="flex gap-2">
@@ -230,7 +230,7 @@ export default function CreatePostModal({
                 )}
               </div>
             ) : (
-              // Màn hình chọn ảnh ban đầu (Step: select)
+              // Màn hình chọn ảnh ban đầu
               <div className="flex flex-col justify-center items-center gap-4 p-8">
                 <Images
                   strokeWidth={1}
@@ -250,7 +250,7 @@ export default function CreatePostModal({
             )}
           </div>
 
-          {/* Cột Phải: Nhập Caption (Chỉ hiện ở bước Caption) */}
+          {/* Cột Phải: Nhập Caption */}
           {step === "caption" && (
             <div className="w-[40%] flex flex-col bg-white dark:bg-zinc-900">
               {/* User Info */}
@@ -276,13 +276,6 @@ export default function CreatePostModal({
                   className="w-full h-50 border-none shadow-none resize-none focus-visible:ring-0 p-0 text-sm bg-transparent"
                   disabled={isSubmitting}
                 />
-              </div>
-
-              <div className="border-t border-gray-200 dark:border-gray-800 p-3">
-                <div className="flex justify-between items-center text-gray-500">
-                  <span className="text-xs">Add location</span>
-                  {/* Icon Location */}
-                </div>
               </div>
             </div>
           )}

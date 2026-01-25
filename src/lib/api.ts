@@ -8,7 +8,7 @@ const api = axios.create({
   },
 });
 
-// Xử lsy gửi đi
+// Xử lý gửi đi
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");

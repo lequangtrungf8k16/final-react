@@ -1,7 +1,6 @@
 import AuthWrapper from "@/components/auth/AuthWrapper";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { registerUser } from "@/store/slices/authSlice";
-import type { RegisterPayload } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Eye, EyeOff, Mail } from "lucide-react";
 import { useState } from "react";

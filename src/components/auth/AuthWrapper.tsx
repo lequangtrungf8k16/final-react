@@ -15,6 +15,7 @@ export default function AuthWrapper({
   const location = useLocation();
   const isLogin = location.pathname === "/login";
   const isRegister = location.pathname === "/register";
+  const isForgetPassword = location.pathname === "/forgot-password";
 
   return (
     <div className="flex flex-col gap-4 justify-center items-center min-h-screen px4 bg-gray-50 dark:bg-black">

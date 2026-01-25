@@ -58,6 +58,10 @@ export default function LoginPage() {
     navigate("/register");
   };
 
+  const goToForgotPassword = () => {
+    navigate("/forgot-password");
+  };
+
   return (
     <AuthWrapper title="Login" subTitle="">
       <LoginForm
@@ -66,6 +70,7 @@ export default function LoginPage() {
         defaultValues={initialData}
         rootError={error}
         onRegister={handleNavigateToRegister}
+        onForgotPassword={goToForgotPassword}
       />
     </AuthWrapper>
   );

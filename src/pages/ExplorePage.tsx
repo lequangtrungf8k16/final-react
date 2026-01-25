@@ -39,7 +39,7 @@ export default function ExplorePage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       {/* Grid Post */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
         {explorePosts.map((post) => (
           <div
             key={post._id}

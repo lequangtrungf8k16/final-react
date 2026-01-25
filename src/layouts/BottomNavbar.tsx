@@ -18,7 +18,7 @@ export default function BottomNavbar({ onOpenCreate }: BottomNavbarProps) {
       {/*Navbar phía trên */}
       <div className="fixed top-0 left-0 right-0 z-60 flex justify-between items-center gap-4 px-4 py-2 bg-white dark:bg-black dark:border-gray-800 border-b-2 border-b-gray-100">
         <NavLink to="/">
-          <h2 className="font-bold">Instagram</h2>
+          <h2 className="font-bold">Instagram Fake</h2>
         </NavLink>
         <div className="flex items-center gap-3 text-gray-600">
           <div className="w-full max-w-50">

@@ -159,7 +159,7 @@ export default function Sidebar({ onOpenCreate }: SidebarProps) {
                 activePanel ? "hidden" : "hidden lg:block",
               )}
             >
-              Instagram
+              Instagram Fake
             </h1>
             <Instagram
               className={cn(

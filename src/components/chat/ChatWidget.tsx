@@ -64,7 +64,7 @@ export default function ChatWidget() {
     return (
       <button
         onClick={toggleChat}
-        className="fixed bottom-4 right-4 z-0] p-4 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all hover:scale-110 flex items-center justify-center cursor-pointer"
+        className="fixed bottom-20 md:bottom-4 right-4 z-0] p-4 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all hover:scale-110 flex items-center justify-center cursor-pointer"
       >
         <Send size={28} />
       </button>

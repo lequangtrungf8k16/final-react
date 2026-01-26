@@ -3,6 +3,7 @@ import type { RootState } from "@/store/store";
 import { Compass, Home, Heart, SquarePlay, Plus, Send } from "lucide-react";
 import { useSelector } from "react-redux";
 import { NavLink, Outlet } from "react-router-dom";
+import ChatWidget from "@/components/chat/ChatWidget";
 
 interface BottomNavbarProps {
   onOpenCreate: () => void;
@@ -15,7 +16,7 @@ export default function BottomNavbar({ onOpenCreate }: BottomNavbarProps) {
 
   return (
     <div className="flex flex-col h-screen w-full relative bg-white dark:bg-black dark:border-gray-800">
-      {/*Navbar phía trên */}
+      {/* Navbar phía trên */}
       <div className="fixed top-0 left-0 right-0 z-60 flex justify-between items-center gap-4 px-4 py-2 bg-white dark:bg-black dark:border-gray-800 border-b-2 border-b-gray-100">
         <NavLink to="/">
           <h2 className="font-bold">Instagram Fake</h2>
@@ -36,6 +37,9 @@ export default function BottomNavbar({ onOpenCreate }: BottomNavbarProps) {
       <div className="flex-1 px-2 py-14">
         <Outlet />
       </div>
+
+      {/* Chat Widget (Hiển thị nổi ở góc phải dưới) */}
+      <ChatWidget />
 
       {/* Navbar phía dưới */}
       <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-evenly items-center gap-4 px-2 py-4 bg-white dark:bg-black dark:border-gray-800 border-t-2 border-t-gray-200">

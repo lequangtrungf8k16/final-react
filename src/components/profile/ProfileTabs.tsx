@@ -46,7 +46,7 @@ export default function ProfileTabs({
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
             className={cn(
-              "flex items-center gap-2 py-4 text-xs font-semibold tracking-widest transition-all",
+              "flex items-center gap-2 py-4 text-xs font-semibold tracking-widest cursor-pointer transition-all",
               isActive
                 ? "border-t border-black dark:border-white text-black dark:text-white"
                 : "text-gray-400 hover:text-gray-600 border-t border-transparent",

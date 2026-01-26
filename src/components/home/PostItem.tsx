@@ -34,6 +34,7 @@ interface PostItemProps {
   likesCount: number;
   timeAgo: string;
   onCommentClick?: () => void;
+  onChatClick?: () => void;
 }
 
 export default function PostItem({
@@ -48,6 +49,7 @@ export default function PostItem({
   likesCount,
   timeAgo,
   onCommentClick,
+  onChatClick,
 }: PostItemProps) {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -163,6 +165,7 @@ export default function PostItem({
             variant="ghost"
             size="icon"
             className="h-6 w-6 p-0 hover:bg-transparent cursor-pointer dark:text-white hover:text-gray-600"
+            onClick={onChatClick}
           >
             <Send size={24} className="hover:scale-110 transition-transform" />
           </Button>

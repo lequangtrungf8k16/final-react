@@ -5,6 +5,7 @@ import { createPost } from "@/store/slices/postSlice";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -126,9 +127,14 @@ export default function CreatePostModal({
         {/* HEADER */}
         <DialogHeader className="w-full h-11 border-b border-gray-200 dark:border-gray-800 flex flex-row items-center justify-between px-4 shrink-0">
           {step === "select" ? (
-            <DialogTitle className="w-full text-center font-semibold text-base">
-              Create new post
-            </DialogTitle>
+            <>
+              <DialogTitle className="w-full text-center font-semibold text-base">
+                Create new post
+              </DialogTitle>
+              <DialogDescription className="sr-only">
+                Drag photos and videos here to upload
+              </DialogDescription>
+            </>
           ) : (
             <>
               {/* Nút Back */}
@@ -242,7 +248,7 @@ export default function CreatePostModal({
                 </p>
                 <Button
                   onClick={handleSelectFromComputer}
-                  className="bg-[#0095f6] hover:bg-[#1877f2] font-semibold px-4 py-2 h-auto text-sm"
+                  className="bg-[#0095f6] hover:bg-[#1877f2] font-semibold px-4 py-2 h-auto text-sm cursor-pointer"
                 >
                   Select from computer
                 </Button>

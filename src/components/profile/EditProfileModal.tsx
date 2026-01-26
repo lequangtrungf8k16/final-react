@@ -83,9 +83,11 @@ export default function EditProfileModal({
 
   const handleSubmit = async () => {
     const formData = new FormData();
-    formData.append("fullName", fullName);
-    formData.append("bio", bio);
-    formData.append("website", website);
+
+    // Thêm các trường text
+    formData.append("fullName", fullName.trim());
+    formData.append("bio", bio.trim());
+    formData.append("website", website.trim());
     formData.append("gender", gender);
 
     if (file) {
@@ -97,6 +99,7 @@ export default function EditProfileModal({
       toast.success("Profile updated successfully");
       onOpenChange(false);
     } catch (error) {
+      console.error("Update profile failed:", error);
       toast.error((error as string) || "Failed to update profile");
     }
   };
@@ -124,7 +127,7 @@ export default function EditProfileModal({
                     className="object-cover"
                   />
                   <AvatarFallback>
-                    {currentUser.username[0]?.toUpperCase()}
+                    {currentUser.username?.[0]?.toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
               </div>
@@ -135,7 +138,7 @@ export default function EditProfileModal({
                 </span>
                 <Button
                   variant="link"
-                  className="text-blue-500 h-auto p-0 font-semibold text-sm"
+                  className="text-blue-500 h-auto p-0 font-semibold text-sm cursor-pointer hover:no-underline"
                   onClick={() => fileInputRef.current?.click()}
                 >
                   Change profile photo
@@ -197,7 +200,7 @@ export default function EditProfileModal({
                   Gender
                 </label>
                 <Select value={gender} onValueChange={setGender}>
-                  <SelectTrigger className="bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                  <SelectTrigger className="bg-gray-50 dark:bg-gray-900 cursor-pointer border-gray-200 dark:border-gray-800">
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
                   <SelectContent>

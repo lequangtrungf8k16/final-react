@@ -1,6 +1,7 @@
 import PostItem from "@/components/home/PostItem";
 import PostSkeleton from "@/components/home/PostSkeleton";
 import { getFeed } from "@/store/slices/postSlice";
+import { accessChat } from "@/store/slices/chatSlice";
 import type { RootState, AppDispatch } from "@/store/store";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,18 +10,19 @@ import type { Post } from "@/types";
 import PostDetailModal from "@/components/home/PostDetailModal";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import ChatWidget from "@/components/chat/ChatWidget";
 
 export default function HomePage() {
   const dispatch = useDispatch<AppDispatch>();
   const { posts, isLoading, pagination } = useSelector(
     (state: RootState) => state.post,
   );
+  const { user: currentUser } = useSelector((state: RootState) => state.auth);
 
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  // Load lần đầu
   useEffect(() => {
     if (posts.length === 0) {
       dispatch(getFeed({ limit: 10, offset: 0 }));
@@ -30,6 +32,11 @@ export default function HomePage() {
   const handleOpenComment = (post: Post) => {
     setSelectedPost(post);
     setModalOpen(true);
+  };
+
+  const handleChatWithAuthor = (authorId: string) => {
+    if (!authorId || authorId === currentUser?._id) return;
+    dispatch(accessChat(authorId));
   };
 
   const handleLoadMore = async () => {
@@ -43,7 +50,7 @@ export default function HomePage() {
   const hasMorePosts = pagination?.hasMore;
 
   return (
-    <div className="flex justify-center w-full">
+    <div className="flex justify-center w-full relative">
       <div className="w-full max-w-118 flex flex-col gap-4 mt-8 pb-20">
         {isLoading && posts.length === 0 && (
           <>
@@ -54,7 +61,6 @@ export default function HomePage() {
 
         {posts.map((post) => {
           if (!post || !post._id) return null;
-
           const author = post.userId;
 
           return (
@@ -79,6 +85,7 @@ export default function HomePage() {
                   : ""
               }
               onCommentClick={() => handleOpenComment(post)}
+              onChatClick={() => handleChatWithAuthor(author?._id)}
             />
           );
         })}
@@ -105,16 +112,10 @@ export default function HomePage() {
 
         {!hasMorePosts && posts.length > 0 && (
           <div className="text-center text-gray-500 text-sm mt-4 mb-10">
-            You have reached the end! ✅
+            You have reached the end!
           </div>
         )}
       </div>
-
-      {/* Danh sách người dùng: Không làm */}
-      {/* <div className="hidden lg:block w-80 pl-16 mt-8">
-        <SuggestedUsers />
-      </div> */}
-
       {selectedPost && (
         <PostDetailModal
           isOpen={isModalOpen}
@@ -122,6 +123,7 @@ export default function HomePage() {
           post={selectedPost}
         />
       )}
+      <ChatWidget />
     </div>
   );
 }

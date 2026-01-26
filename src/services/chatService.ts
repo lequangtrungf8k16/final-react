@@ -2,53 +2,69 @@ import api from "../lib/api";
 import type { Conversation, Message } from "@/types/chat";
 
 export interface SendMessagePayload {
+  conversationId: string;
   recipientId: string;
   content?: string;
   image?: File;
 }
 
 export const chatService = {
-  // Lấy danh sách các cuộc trò chuyện (Inbox)
-  getConversations: () => {
+  getConversations: (page = 1, limit = 20) => {
     return api.get<{
       success: boolean;
-      data: Conversation[];
-    }>("/api/messages/conversations");
-  },
-
-  // Lấy nội dung tin nhắn của một cuộc trò chuyện
-  getMessages: (otherUserId: string) => {
-    return api.get<{
-      success: boolean;
-      data: Message[];
-    }>(`/api/messages/${otherUserId}`);
-  },
-
-  // Gửi tin nhắn (Text hoặc Ảnh)
-  sendMessage: (payload: SendMessagePayload) => {
-    const formData = new FormData();
-    formData.append("recipientId", payload.recipientId);
-
-    if (payload.content) {
-      formData.append("content", payload.content);
-    }
-
-    if (payload.image) {
-      formData.append("image", payload.image);
-    }
-
-    return api.post<{
-      success: boolean;
-      data: Message;
-    }>("/api/messages", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+      data: {
+        conversations: Conversation[];
+        pagination: any;
+      };
+    }>("/api/messages/conversations", {
+      params: { page, limit },
     });
   },
 
-  // Xóa cuộc trò chuyện
-  deleteConversation: (recipientId: string) => {
-    return api.delete(`/api/messages/${recipientId}`);
+  createOrGetConversation: (userId: string) => {
+    return api.post<{
+      success: boolean;
+      data: Conversation;
+    }>("/api/messages/conversations", { userId });
+  },
+
+  getMessages: (conversationId: string, page = 1, limit = 50) => {
+    return api.get<{
+      success: boolean;
+      data: {
+        messages: Message[];
+        pagination: any;
+      };
+    }>(`/api/messages/conversations/${conversationId}/messages`, {
+      params: { page, limit },
+    });
+  },
+
+  sendMessage: (payload: SendMessagePayload) => {
+    if (payload.image) {
+      const formData = new FormData();
+      formData.append("conversationId", payload.conversationId);
+      formData.append("recipientId", payload.recipientId);
+      formData.append("messageType", "image");
+      formData.append("image", payload.image);
+
+      return api.post<{ success: boolean; data: Message }>(
+        "/api/messages/messages",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
+    }
+
+    return api.post<{ success: boolean; data: Message }>(
+      "/api/messages/messages",
+      {
+        conversationId: payload.conversationId,
+        recipientId: payload.recipientId,
+        messageType: "text",
+        content: payload.content,
+      },
+    );
   },
 };

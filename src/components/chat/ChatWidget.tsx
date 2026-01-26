@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { MessageCircle, X, Maximize2, Minus } from "lucide-react";
+import { X, Maximize2, Minus, Send } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import ChatSidebar from "./ChatSidebar";
 import ChatWindow from "./ChatWindow";
@@ -66,7 +66,7 @@ export default function ChatWidget() {
         onClick={toggleChat}
         className="fixed bottom-4 right-4 z-0] p-4 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all hover:scale-110 flex items-center justify-center cursor-pointer"
       >
-        <MessageCircle size={28} />
+        <Send size={28} />
       </button>
     );
   }
@@ -85,7 +85,7 @@ export default function ChatWidget() {
           className="font-bold flex items-center gap-2 cursor-pointer"
           onClick={() => setIsMinimized(!isMinimized)}
         >
-          <MessageCircle size={20} />
+          <Send size={20} />
           <span>Messages</span>
         </div>
 
